@@ -1,9 +1,12 @@
-# Multigeiger Projekt
+# Migrate from multigeiger projekt to newer/simpler version
+
+References: 
 
 https://ecocurious.de/projekte/multigeiger-2/
 
 website
 https://multigeiger.citysensor.de/
+
 
 
 ## sensors
