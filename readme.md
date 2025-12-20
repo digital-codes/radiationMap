@@ -29,3 +29,41 @@ https://maps.sensor.community/data/v1/wind.json
 
 see also: https://www.weather.gov/documentation/services-web-api
 
+## code
+
+Tested with python3.12 and python3.13. 
+
+Replace python3.12 with whatever python you use
+
+
+### 1) Create sqlite database
+**To be replaced with mariadb, postgres, something else**
+
+make sure file data/radiation_relevant_schema.json  exists
+
+run createDb.sh
+
+should create data/radiation.db 
+
+### 2) Run Daemon once for testing
+
+make sure files data/sensor_types.json and data/measurement_items.json exist
+
+run python3.12 luftApiDaemon.py 
+
+should update database and write some files data directory.
+check data/radiation.csv and data/radiation.geojson
+
+### 3) Run analysis
+
+make sure database exists
+
+run python3.12 luftSequence.py
+
+should write timeseries for each sensor to data/series_<sensor_id>.json 
+should write plot for first 10 sensors to data/series_<sensor_id>.png 
+
+### 4) Install crontab
+*/5 * * * * cd <directory> && /usr/bin/python3.12 <directory>/luftApiDaemon.py >> <directory>/luftApiDaemon.log 2>&1
+
+
