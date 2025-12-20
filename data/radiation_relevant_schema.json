@@ -1,0 +1,57 @@
+[
+  {
+    "order": 0,
+    "name": "file_id",
+    "type": "number"
+  },
+  {
+    "order": 1,
+    "name": "sensor_id",
+    "type": "number"
+  },
+  {
+    "order": 2,
+    "name": "timestamp",
+    "type": "timestamp"
+  },
+  {
+    "order": 3,
+    "name": "latitude",
+    "type": "number"
+  },
+  {
+    "order": 4,
+    "name": "longitude",
+    "type": "number"
+  },
+  {
+    "order": 5,
+    "name": "sensor_type",
+    "type": "text"
+  },
+  {
+    "order": 6,
+    "name": "manufacturer",
+    "type": "text"
+  },
+  {
+    "order": 7,
+    "name": "counts",
+    "type": "number"
+  },
+  {
+    "order": 8,
+    "name": "counts_per_minute",
+    "type": "number"
+  },
+  {
+    "order": 9,
+    "name": "hv_pulses",
+    "type": "number"
+  },
+  {
+    "order": 10,
+    "name": "sample_time_ms",
+    "type": "timestamp"
+  }
+]
