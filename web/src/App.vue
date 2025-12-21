@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
 import Map from './components/GeoMapSimple.vue'
+import Map2 from './components/SimpleMap.vue'
 import {resampleTimeSeries} from './resample.ts'
 import {ref} from 'vue'
 const output = ref<[string, number][]>([])
@@ -32,7 +33,15 @@ output.value = res;
   <div>
     <h2>Multi-Geiger Followup Test</h2>
     <p>{{ output }}</p>
+    <!--
     <Map title="Multi-Geiger"/>
+    -->
+    <div class="card">
+    <Map2 title="Multi-Geiger2"
+    dataUrl="/data/radiationLatest.geojson" 
+    tileIdx="5"
+    />
+  </div>
   </div>
   <!--  
   <HelloWorld msg="Empty template" />
@@ -51,5 +60,8 @@ output.value = res;
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
+}
+.card {
+  height: 400px;
 }
 </style>
