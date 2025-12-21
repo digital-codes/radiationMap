@@ -1,0 +1,1141 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.15962714069,
+          48.77895659073
+        ]
+      },
+      "properties": {
+        "sensor_id": 31122.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 77.0,
+        "timestamp": "2025-12-21 10:23:47"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.26443138638,
+          47.1465504
+        ]
+      },
+      "properties": {
+        "sensor_id": 35253.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 112.0,
+        "timestamp": "2025-12-21 10:25:54"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.8249158,
+          47.9759075
+        ]
+      },
+      "properties": {
+        "sensor_id": 36340.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 58.0,
+        "timestamp": "2025-12-21 10:23:43"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.584,
+          48.042
+        ]
+      },
+      "properties": {
+        "sensor_id": 36347.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 67.0,
+        "timestamp": "2025-12-21 10:24:30"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.16196465492,
+          48.62966576743
+        ]
+      },
+      "properties": {
+        "sensor_id": 37773.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 0.0,
+        "timestamp": "2025-12-21 10:24:53"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.3331337,
+          52.4745496
+        ]
+      },
+      "properties": {
+        "sensor_id": 38393.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 61.0,
+        "timestamp": "2025-12-21 10:23:35"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.086,
+          48.814
+        ]
+      },
+      "properties": {
+        "sensor_id": 38695.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 138.0,
+        "timestamp": "2025-12-21 10:25:06"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.854,
+          50.592
+        ]
+      },
+      "properties": {
+        "sensor_id": 38954.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 120.0,
+        "timestamp": "2025-12-21 10:25:44"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          2.332,
+          48.874
+        ]
+      },
+      "properties": {
+        "sensor_id": 39274.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 44.0,
+        "timestamp": "2025-12-21 10:25:56"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.286,
+          48.958
+        ]
+      },
+      "properties": {
+        "sensor_id": 39280.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 101.0,
+        "timestamp": "2025-12-21 10:24:19"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.139229,
+          48.99474835
+        ]
+      },
+      "properties": {
+        "sensor_id": 40369.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 78.0,
+        "timestamp": "2025-12-21 10:24:13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.024,
+          48.682
+        ]
+      },
+      "properties": {
+        "sensor_id": 41135.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 88.0,
+        "timestamp": "2025-12-21 10:23:39"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.00551140308,
+          48.68531664498
+        ]
+      },
+      "properties": {
+        "sensor_id": 42048.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 102.0,
+        "timestamp": "2025-12-21 10:24:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.624,
+          48.638
+        ]
+      },
+      "properties": {
+        "sensor_id": 43128.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 87.0,
+        "timestamp": "2025-12-21 10:25:04"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.739914,
+          51.077851
+        ]
+      },
+      "properties": {
+        "sensor_id": 45879.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 68.0,
+        "timestamp": "2025-12-21 10:23:35"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.1878391,
+          52.5583099
+        ]
+      },
+      "properties": {
+        "sensor_id": 46258.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 63.0,
+        "timestamp": "2025-12-21 10:23:32"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.19907033443,
+          49.04199637782
+        ]
+      },
+      "properties": {
+        "sensor_id": 46599.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 76.0,
+        "timestamp": "2025-12-21 10:24:20"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.296,
+          47.044
+        ]
+      },
+      "properties": {
+        "sensor_id": 49588.0,
+        "sensor_type": "Radiation SBM-20",
+        "count_per_minute": 17.0,
+        "timestamp": "2025-12-21 10:25:24"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.19,
+          51.124
+        ]
+      },
+      "properties": {
+        "sensor_id": 53507.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 72.10860603456379,
+        "timestamp": "2025-12-21 10:24:20"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.47489384374,
+          48.9551103
+        ]
+      },
+      "properties": {
+        "sensor_id": 57613.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 86.0,
+        "timestamp": "2025-12-21 10:24:58"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.62639737129,
+          51.30592214904
+        ]
+      },
+      "properties": {
+        "sensor_id": 57776.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 11.0,
+        "timestamp": "2025-12-21 10:24:38"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.636,
+          46.674
+        ]
+      },
+      "properties": {
+        "sensor_id": 59328.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 77.0,
+        "timestamp": "2025-12-21 10:24:29"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.83767253396,
+          54.23869287888
+        ]
+      },
+      "properties": {
+        "sensor_id": 59914.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 64.0,
+        "timestamp": "2025-12-21 10:25:13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.086,
+          53.55
+        ]
+      },
+      "properties": {
+        "sensor_id": 65059.0,
+        "sensor_type": "Radiation SBM-20",
+        "count_per_minute": 14.0,
+        "timestamp": "2025-12-21 10:21:31"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.49,
+          48.602
+        ]
+      },
+      "properties": {
+        "sensor_id": 68627.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 65.96288594248779,
+        "timestamp": "2025-12-21 10:25:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.884,
+          48.702
+        ]
+      },
+      "properties": {
+        "sensor_id": 68890.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 86.66768733067516,
+        "timestamp": "2025-12-21 10:25:08"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.85920417298,
+          52.49172209056
+        ]
+      },
+      "properties": {
+        "sensor_id": 69398.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 63.0,
+        "timestamp": "2025-12-21 10:25:21"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.29,
+          49.064
+        ]
+      },
+      "properties": {
+        "sensor_id": 69441.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 67.0,
+        "timestamp": "2025-12-21 10:24:10"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.428,
+          52.492
+        ]
+      },
+      "properties": {
+        "sensor_id": 70795.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 72.0,
+        "timestamp": "2025-12-21 10:25:24"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.0944973,
+          49.4301337
+        ]
+      },
+      "properties": {
+        "sensor_id": 70948.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 0.0,
+        "timestamp": "2025-12-21 10:24:36"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.116,
+          52.1
+        ]
+      },
+      "properties": {
+        "sensor_id": 71364.0,
+        "sensor_type": "Radiation SBM-19",
+        "count_per_minute": 58.0,
+        "timestamp": "2025-12-21 10:25:27"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.69201388954,
+          46.73092749387
+        ]
+      },
+      "properties": {
+        "sensor_id": 71576.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 82.0,
+        "timestamp": "2025-12-21 10:25:13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.83313113451,
+          54.44436449319
+        ]
+      },
+      "properties": {
+        "sensor_id": 71864.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 61.0,
+        "timestamp": "2025-12-21 10:25:06"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.2670831,
+          47.9596715
+        ]
+      },
+      "properties": {
+        "sensor_id": 72130.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": null,
+        "timestamp": "2025-12-21 10:23:54"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.716,
+          48.014
+        ]
+      },
+      "properties": {
+        "sensor_id": 72145.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 84.0,
+        "timestamp": "2025-12-21 10:24:55"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -1.69063657522,
+          48.09344968967
+        ]
+      },
+      "properties": {
+        "sensor_id": 73622.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 55.0,
+        "timestamp": "2025-12-21 10:25:54"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.60452565882,
+          49.8047991
+        ]
+      },
+      "properties": {
+        "sensor_id": 73667.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 80.11372694903545,
+        "timestamp": "2025-12-21 10:25:18"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.104407274,
+          52.330399
+        ]
+      },
+      "properties": {
+        "sensor_id": 73778.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 74.0,
+        "timestamp": "2025-12-21 10:24:25"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.02568435669,
+          51.84032846704
+        ]
+      },
+      "properties": {
+        "sensor_id": 73785.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 84.0,
+        "timestamp": "2025-12-21 10:25:48"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.42313671112,
+          52.42600555204
+        ]
+      },
+      "properties": {
+        "sensor_id": 73797.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 86.0,
+        "timestamp": "2025-12-21 10:26:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.245641,
+          53.54470115
+        ]
+      },
+      "properties": {
+        "sensor_id": 73887.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 72.0,
+        "timestamp": "2025-12-21 10:24:23"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.04,
+          52.544
+        ]
+      },
+      "properties": {
+        "sensor_id": 73891.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 55.0,
+        "timestamp": "2025-12-21 10:24:11"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.16055,
+          51.58667
+        ]
+      },
+      "properties": {
+        "sensor_id": 74198.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 69.0,
+        "timestamp": "2025-12-21 10:25:05"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.20346361399,
+          51.84943759612
+        ]
+      },
+      "properties": {
+        "sensor_id": 74332.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 58.0,
+        "timestamp": "2025-12-21 10:25:58"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.74,
+          49.826
+        ]
+      },
+      "properties": {
+        "sensor_id": 74721.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 59.0,
+        "timestamp": "2025-12-21 10:23:42"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.35,
+          48.432
+        ]
+      },
+      "properties": {
+        "sensor_id": 74844.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 76.0,
+        "timestamp": "2025-12-21 10:25:05"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.468,
+          48.768
+        ]
+      },
+      "properties": {
+        "sensor_id": 75158.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 61.0,
+        "timestamp": "2025-12-21 10:23:59"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          8.538,
+          53.102
+        ]
+      },
+      "properties": {
+        "sensor_id": 75411.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 56.0,
+        "timestamp": "2025-12-21 10:23:58"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          7.96392544366,
+          51.6420799
+        ]
+      },
+      "properties": {
+        "sensor_id": 75443.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 7.0,
+        "timestamp": "2025-12-21 10:24:00"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.154,
+          50.364
+        ]
+      },
+      "properties": {
+        "sensor_id": 75841.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 76.0,
+        "timestamp": "2025-12-21 10:23:45"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.7967708,
+          51.0534882
+        ]
+      },
+      "properties": {
+        "sensor_id": 76518.0,
+        "sensor_type": "Radiation SBM-20",
+        "count_per_minute": 19.0,
+        "timestamp": "2025-12-21 10:24:02"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.062,
+          54.314
+        ]
+      },
+      "properties": {
+        "sensor_id": 77193.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 67.0,
+        "timestamp": "2025-12-21 10:25:13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.38989496196,
+          49.73926995964
+        ]
+      },
+      "properties": {
+        "sensor_id": 77259.0,
+        "sensor_type": "Radiation SBM-20",
+        "count_per_minute": null,
+        "timestamp": "2025-12-21 10:24:05"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.17789856482,
+          48.18064425
+        ]
+      },
+      "properties": {
+        "sensor_id": 77506.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 59.0,
+        "timestamp": "2025-12-21 10:25:26"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.97280150652,
+          51.14427475899
+        ]
+      },
+      "properties": {
+        "sensor_id": 78047.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 0.0,
+        "timestamp": "2025-12-21 10:23:35"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          14.00324732065,
+          48.15094927783
+        ]
+      },
+      "properties": {
+        "sensor_id": 79472.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 75.0,
+        "timestamp": "2025-12-21 10:23:54"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          151.032,
+          -33.792
+        ]
+      },
+      "properties": {
+        "sensor_id": 81163.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 79.0,
+        "timestamp": "2025-12-21 10:23:39"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.0045153485,
+          48.68644955
+        ]
+      },
+      "properties": {
+        "sensor_id": 82414.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 85.91192347250886,
+        "timestamp": "2025-12-21 10:25:13"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          12.094,
+          50.838
+        ]
+      },
+      "properties": {
+        "sensor_id": 82570.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 143.0,
+        "timestamp": "2025-12-21 10:25:46"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.194,
+          52.65
+        ]
+      },
+      "properties": {
+        "sensor_id": 82847.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 59.0,
+        "timestamp": "2025-12-21 10:25:19"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.898,
+          48.356
+        ]
+      },
+      "properties": {
+        "sensor_id": 83962.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 60.8,
+        "timestamp": "2025-12-21 10:23:38"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          10.898,
+          48.356
+        ]
+      },
+      "properties": {
+        "sensor_id": 83965.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 60.0,
+        "timestamp": "2025-12-21 10:23:38"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          37.632,
+          54.228
+        ]
+      },
+      "properties": {
+        "sensor_id": 83967.0,
+        "sensor_type": "Radiation SBM-20",
+        "count_per_minute": 10.6,
+        "timestamp": "2025-12-21 10:24:52"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          9.886,
+          47.598
+        ]
+      },
+      "properties": {
+        "sensor_id": 87828.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 58.0,
+        "timestamp": "2025-12-21 10:23:38"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          13.88174325228,
+          47.06912309294
+        ]
+      },
+      "properties": {
+        "sensor_id": 89109.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 88.0,
+        "timestamp": "2025-12-21 10:23:59"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          5.468,
+          52.002
+        ]
+      },
+      "properties": {
+        "sensor_id": 89314.0,
+        "sensor_type": "Radiation SBM-19",
+        "count_per_minute": 78.75379777197378,
+        "timestamp": "2025-12-21 10:24:31"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          76.862,
+          43.226
+        ]
+      },
+      "properties": {
+        "sensor_id": 90943.0,
+        "sensor_type": "Radiation SBM-20",
+        "count_per_minute": 18.44857142354,
+        "timestamp": "2025-12-21 10:22:56"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          6.612,
+          50.636
+        ]
+      },
+      "properties": {
+        "sensor_id": 91503.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 105.0,
+        "timestamp": "2025-12-21 10:25:12"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          0.70058494806,
+          47.41875817197
+        ]
+      },
+      "properties": {
+        "sensor_id": 93093.0,
+        "sensor_type": "Radiation SBM-20",
+        "count_per_minute": 22.0,
+        "timestamp": "2025-12-21 10:25:54"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.35973332243,
+          48.49266638089
+        ]
+      },
+      "properties": {
+        "sensor_id": 96291.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 116.0,
+        "timestamp": "2025-12-21 10:25:48"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          11.35985669767,
+          48.49287474951
+        ]
+      },
+      "properties": {
+        "sensor_id": 96294.0,
+        "sensor_type": "Radiation Si22G",
+        "count_per_minute": 143.0,
+        "timestamp": "2025-12-21 10:23:36"
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@
    height="600"
    version="1.1"
    id="svg2"
-   sodipodi:docname="radiationIcon.svg"
+   sodipodi:docname="radiationIcon-red.svg"
    inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -35,7 +35,8 @@
      cy="300"
      r="300"
      fill="rgb(101, 248, 95)"
-     id="circle1" />
+     id="circle1"
+     style="fill:#ff0000" />
   <circle
      cx="300"
      cy="300"
