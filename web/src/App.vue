@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import HelloWorld from './components/HelloWorld.vue'
+import Map from './components/GeoMapSimple.vue'
 import {resampleTimeSeries} from './resample.ts'
 import {ref} from 'vue'
 const output = ref<[string, number][]>([])
@@ -29,10 +30,13 @@ output.value = res;
 
 <template>
   <div>
-    <h2>Resample Time Series Example</h2>
+    <h2>Multi-Geiger Followup Test</h2>
     <p>{{ output }}</p>
+    <Map title="Multi-Geiger"/>
   </div>
+  <!--  
   <HelloWorld msg="Empty template" />
+  -->
 </template>
 
 <style scoped>
