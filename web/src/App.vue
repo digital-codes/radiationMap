@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import Map from './components/SimpleMap2.vue'
+import Map from './components/SimpleMap.vue'
 import { resampleTimeSeries } from './services/resample.ts'
 import type { SampleInput, SampleOutput } from './services/resample.ts'
 import {ref} from 'vue'
+import L from "leaflet";
 
 // map stuff
 const mapDataProps = {
@@ -11,6 +12,10 @@ const mapDataProps = {
 
 const sensorClicked = (sensorId: string) => {
   console.log("Sensor clicked in parent:", sensorId);
+};
+
+const dataLoaded = (payload: { content: any; id: HTMLElement | null; L: typeof L | null; map: any | null }) => {
+  console.log("Data loaded in parent:", payload);
 };
 
 // sampling test stuff
@@ -49,6 +54,7 @@ output.value = res;
     :tileIdx="5"
     :dataProps="mapDataProps"
     @sensor_click="sensorClicked"
+    @data="dataLoaded"
     />
   </div>
   </div>

@@ -50,8 +50,10 @@ const formatInTimeZone =
 // Types
 // -----------------------------
 export type TimestampInput = string | number | Date;
-export type InputPoint = readonly [TimestampInput, unknown];
-export type OutputPoint = readonly [string, number | null];
+
+export type SampleInput = readonly [TimestampInput, unknown];
+export type SampleOutput =  [string, number | null];
+
 
 export interface ResampleOptions {
   /** Bin size in minutes. Default: 15 */
@@ -96,9 +98,9 @@ export interface ResampleOptions {
  * Resample an irregular time series to fixed bins aligned in a given time zone.
  */
 export function resampleTimeSeries(
-  data: readonly InputPoint[],
+  data: readonly SampleInput[],
   opts: ResampleOptions = {}
-): OutputPoint[] {
+): SampleOutput[] {
   const intervalMinutes = opts.intervalMinutes ?? 15;
   const timeZone = opts.timeZone ?? "UTC";
   const lookbackDays = opts.lookbackDays ?? Infinity;
@@ -185,8 +187,12 @@ export function resampleTimeSeries(
     const binStartUtc = floorToIntervalInTZ(p.tUtc, intervalMinutes, timeZone);
     const idx = Math.floor((binStartUtc.getTime() - startBinUtc.getTime()) / intervalMs);
     if (idx < 0 || idx >= binCount) continue;
-
-    if (p.v !== null && Number.isFinite(p.v)) buckets[idx].push(p.v);
+    
+    const v = p.v;
+    if (v !== null && Number.isFinite(v)) {
+      const bucket = buckets[idx];
+      if (bucket) bucket.push(v);
+    }
   }
 
   const ys: Array<number | null> = new Array(binCount).fill(null);
@@ -201,7 +207,7 @@ export function resampleTimeSeries(
   const filled = backFill(forwardFill(interpolated));
 
   // 7) Format output
-  const out: OutputPoint[] = new Array(binCount);
+  const out: SampleOutput[] = new Array(binCount);
   for (let i = 0; i < binCount; i++) {
     const t = tsMs[i];
     if (t === undefined) continue; // defensive for noUncheckedIndexedAccess
@@ -209,7 +215,7 @@ export function resampleTimeSeries(
   }
 
   // Filter out any holes (shouldn't happen, but TS allows it due to continue)
-  return out.filter((x): x is OutputPoint => Array.isArray(x));
+  return out.filter((x): x is SampleOutput => Array.isArray(x));
 }
 
 // -----------------------------
@@ -332,7 +338,7 @@ function linearInterpolateNulls(tsMs: number[], ys: Array<number | null>): Array
       const t0 = tsMs[left];
       const t1 = tsMs[right];
 
-      if (y0 !== null && y1 !== null && t0 !== undefined && t1 !== undefined) {
+      if (y0 !== null && y0 !== undefined && y1 !== null && y1 !== undefined && t0 !== undefined && t1 !== undefined) {
         const dt = t1 - t0;
         if (dt > 0) {
           for (let k = left + 1; k < right; k++) {
