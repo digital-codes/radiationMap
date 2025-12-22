@@ -7,8 +7,12 @@ import {ref} from 'vue'
 
 // map stuff
 const mapDataProps = {
-  "name":"sensor_id", "date":"timestamp"
+  "name":"sensor_id", "date":"timestamp","value":"count_per_minute"
 }; 
+
+const sensorClicked = (sensorId: string) => {
+  console.log("Sensor clicked in parent:", sensorId);
+};
 
 // sampling test stuff
 const output = ref<[string, number][]>([])
@@ -48,6 +52,7 @@ output.value = res;
     dataUrl="/data/radiationLatest.geojson" 
     tileIdx="5"
     :dataProps="mapDataProps"
+    @sensor_click="sensorClicked"
     />
   </div>
   </div>

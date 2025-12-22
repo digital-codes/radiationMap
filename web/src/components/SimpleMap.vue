@@ -9,7 +9,14 @@ import { ref, onMounted, onUnmounted, watch } from "vue";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-const emit = defineEmits(["data"]);
+// coordinate conversion
+import proj4 from "proj4";
+
+import { fromUrl } from "geotiff";
+import { attachUWindOverlay } from "../services/WindOverlay";
+
+
+const emit = defineEmits(["data", "sensor_click"]);
 
 const props = defineProps({
   /* Add your props here */
@@ -24,11 +31,11 @@ const props = defineProps({
   },
   dataName: {
     type: String,
-    default: "LineChart",
+    default: "Geo Map",
   },
   ariaLabel: {
     type: String,
-    default: "Aria LineChart",
+    default: "Aria Geo Map",
   },
   // optional X axis identifier
   dataX: {
@@ -80,10 +87,55 @@ const theMap = ref(null);
 const Lref = ref(null);
 const tileLayer = ref(null);
 const geoLayer = ref(null);
+const windLayer = ref(null);
+
+async function loadUWind() {
+  const tiff = await fromUrl("/data/u100_cog.tif");
+  const image = await tiff.getImage();
+
+  const rasters = await image.readRasters({ samples: [0] });
+  const data = rasters[0];
+
+  const width = image.getWidth();
+  const height = image.getHeight();
+  const bbox = image.getBoundingBox(); // [minX, minY, maxX, maxY]
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d");
+  const img = ctx.createImageData(width, height);
+
+  const vmax = 15;
+
+  for (let i = 0; i < data.length; i++) {
+    const u = data[i];
+    if (!Number.isFinite(u)) continue;
+
+    const v = Math.max(-1, Math.min(1, u / vmax));
+
+    let r = 0, b = 0;
+    if (v > 0) r = 255 * v;
+    else b = -255 * v;
+
+    img.data[i * 4 + 0] = r;
+    img.data[i * 4 + 2] = b;
+    img.data[i * 4 + 3] = Math.abs(v) * 120;
+  }
+
+  ctx.putImageData(img, 0, 0);
+
+  const bounds = [
+    [bbox[1], bbox[0]],
+    [bbox[3], bbox[2]]
+  ];
+
+  windLayer.value = L.imageOverlay(canvas.toDataURL(), bounds, {
+    opacity: 0.6
+  }).addTo(mapInstance.value);
+}
 
 
-// coordinate conversion
-import proj4 from "proj4";
 // EPSG is frequently used in Germany
 const EPSG25832 = "+proj=utm +zone=32 +ellps=GRS80 +units=m +no_defs";
 // EPSG4326 is WGS84, default for Leaflet
@@ -264,8 +316,8 @@ const loadData = async () => {
         let popupContent = "<b>" + feature.properties[props.dataProps.name] + "</b><br>"
         if (feature.properties[props.dataProps.description])
           popupContent += feature.properties[props.dataProps.description] + "<br>"
-        if (feature.properties[props.dataProps.date])
-          popupContent += "Date: " + feature.properties[props.dataProps.date] + "<br>"
+        if (feature.properties[props.dataProps.date] && feature.properties[props.dataProps.value])
+          popupContent += "Date: " + feature.properties[props.dataProps.date] + ", CPM: " + feature.properties[props.dataProps.value] + "<br>"
         if (feature.properties[props.dataProps.img])
           popupContent +=
             "<img src='" + feature.properties[props.dataProps.img] + "' width='160'><br>" +
@@ -273,14 +325,33 @@ const loadData = async () => {
         if (feature.properties[props.dataProps.url])
           popupContent += "<a href='" + feature.properties[props.dataProps.url] + "' target=_blank>More</a><br>"
         layer.bindPopup(popupContent);
+        if (feature.properties && feature.properties[props.dataProps.value] != null && feature.properties[props.dataProps.value] > 0) {
+          const raw = feature.properties[props.dataProps.value];
+          const val = parseFloat(raw);
+          if (!Number.isNaN(val) && layer && typeof layer.setIcon === "function") {
+            const color = val > 65 ? "red" : "green"; // >65 => red, else green
+            const icon = Lref.value.icon({
+              iconRetinaUrl: `/icons/radiationIcon-${color}.svg`,
+              iconUrl: `/icons/radiationIcon-${color}.svg`,
+              iconSize: [28, 28],
+              iconAnchor: [14, 14],
+              popupAnchor: [0, -14],
+              tooltipAnchor: [14, 0],
+              shadowUrl: "/icons/radiationIcon-shadow.svg",
+              shadowSize: [31, 33],
+            });
+            layer.setIcon(icon);
+          }
+        }
       }
        // click callback
       layer.on('click', (e) => {
-        console.log('Clicked feature:', feature)
-        console.log('LatLng:', e.latlng)
+        const sensor = feature.properties.sensor_id || "unknown";
+        const value = feature.properties[props.dataProps.value] || "N/A";
+        console.log('Clicked feature:', sensor, value);
 
         // example: emit event (Vue)
-        // emit('feature-click', feature)
+        emit('sensor_click', sensor)
 
         // example: open popup manually
         // layer.openPopup()
@@ -323,13 +394,14 @@ const loadData = async () => {
       delete Lref.value.Icon.Default.prototype._getIconUrl;
 
       Lref.value.Icon.Default.mergeOptions({
-        iconRetinaUrl: "/icons/radiationIcon-red.svg", //markerIcon2x,
-        iconUrl: "/icons/radiationIcon-red.svg", //markerIcon,
+        iconRetinaUrl: "/icons/radiationIcon-gray.svg", //markerIcon2x,
+        iconUrl: "/icons/radiationIcon-gray.svg", //markerIcon,
         iconSize: [28, 28],
         iconAnchor: [14, 14],
         popupAnchor: [0, -14],
         tooltipAnchor: [14, 0],
-        shadowUrl: markerShadow,
+        shadowUrl: "/icons/radiationIcon-shadow.svg", // markerShadow,
+        shadowSize: [31, 33]
       });
 
       mapInstance.value = Lref.value.map(theMap.value).setView([49.0069, 8.4037], 11); // Karlsruhe coordinates
@@ -345,6 +417,8 @@ const loadData = async () => {
     tileLayer.value.addTo(mapInstance.value);
     // load geojson ...
     await loadData()
+    // await loadUWind(); // ✅ correct place
+    await attachUWindOverlay(mapInstance.value, "/data/u100_cog.tif");
   });
 
   onUnmounted(async () => {
@@ -352,6 +426,7 @@ const loadData = async () => {
     await geoLayer.value.clearLayers();
     await tileLayer.value.removeFrom(mapInstance.value)
     await geoLayer.value.removeFrom(mapInstance.value)
+    await windLayer.value.removeFrom(mapInstance.value)
     // await mapInstance.value.remove();
     mapInstance.value = null;
   });
@@ -372,4 +447,27 @@ const loadData = async () => {
   height: 100%;
   width: 100%;
 }
+
+.wind-legend {
+  position: absolute;
+  right: 12px;
+  bottom: 24px;
+  background: rgba(255,255,255,0.85);
+  padding: 10px 12px;
+  border-radius: 10px;
+  font: 12px/1.2 system-ui, sans-serif;
+}
+.wind-legend .bar {
+  width: 180px;
+  height: 10px;
+  border-radius: 6px;
+  background: linear-gradient(90deg, rgba(0,0,255,0.9), rgba(0,0,0,0), rgba(255,0,0,0.9));
+}
+.wind-legend .labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+
 </style>

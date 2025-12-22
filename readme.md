@@ -36,6 +36,26 @@ https://maps.sensor.community/data/v1/wind.json
 
 see also: https://www.weather.gov/documentation/services-web-api
 
+
+#### Wind from ECMFW
+
+
+https://www.ecmwf.int/en/forecasts/datasets/open-data
+https://charts.ecmwf.int/products/medium-wind-100m?base_time=202512220000&projection=opencharts_europe&valid_time=202512220000
+
+https://pypi.org/project/ecmwf-opendata/
+
+
+The following wording shall be attached to the services created with this ECMWF data product:
+
+    Copyright statement: Copyright "This service is based on data and products of the European Centre for Medium-Range Weather Forecasts (ECMWF)".
+    Source www.ecmwf.int
+    Licence Statement: This ECMWF data is published under a Creative Commons Attribution 4.0 International (CC BY 4.0). https://creativecommons.org/licenses/by/4.0/
+    Disclaimer: ECMWF does not accept any liability whatsoever for any error or omission in the data, their availability, or for any loss or damage arising from their use.
+    Where applicable, an indication if the material has been modified and an indication of previous modifications
+
+
+
 ## code
 
 Tested with python3.12 and python3.13. 
