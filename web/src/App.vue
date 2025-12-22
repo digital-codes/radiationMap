@@ -4,6 +4,13 @@ import Map from './components/GeoMapSimple.vue'
 import Map2 from './components/SimpleMap.vue'
 import {resampleTimeSeries} from './resample.ts'
 import {ref} from 'vue'
+
+// map stuff
+const mapDataProps = {
+  "name":"sensor_id", "date":"timestamp"
+}; 
+
+// sampling test stuff
 const output = ref<[string, number][]>([])
 
 const input: SampleInput[] = [
@@ -40,6 +47,7 @@ output.value = res;
     <Map2 title="Multi-Geiger2"
     dataUrl="/data/radiationLatest.geojson" 
     tileIdx="5"
+    :dataProps="mapDataProps"
     />
   </div>
   </div>

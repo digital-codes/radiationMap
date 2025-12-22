@@ -257,7 +257,6 @@ const loadData = async () => {
   if (geoLayer.value)
     await geoLayer.value.removeFrom(mapInstance.value)
 
-
   geoLayer.value = Lref.value.geoJSON(geojsonData.value, {
     onEachFeature: (feature, layer) => {
       if (feature.properties && feature.properties[props.dataProps.name]) {
@@ -275,6 +274,17 @@ const loadData = async () => {
           popupContent += "<a href='" + feature.properties[props.dataProps.url] + "' target=_blank>More</a><br>"
         layer.bindPopup(popupContent);
       }
+       // click callback
+      layer.on('click', (e) => {
+        console.log('Clicked feature:', feature)
+        console.log('LatLng:', e.latlng)
+
+        // example: emit event (Vue)
+        // emit('feature-click', feature)
+
+        // example: open popup manually
+        // layer.openPopup()
+      })
     },
   })
   geoLayer.value.addTo(mapInstance.value);
@@ -298,6 +308,11 @@ const loadData = async () => {
     }
   };
 
+  const geoClickHandler = (event) => {
+    const layer = event.target;
+    const feature = layer.feature;
+    console.log("Feature clicked", feature,feature.properties);
+  };
 
   onMounted(async () => {
     console.log("Map mounted")
@@ -308,12 +323,16 @@ const loadData = async () => {
       delete Lref.value.Icon.Default.prototype._getIconUrl;
 
       Lref.value.Icon.Default.mergeOptions({
-        iconRetinaUrl: markerIcon2x,
-        iconUrl: markerIcon,
+        iconRetinaUrl: "/icons/radiationIcon-red.svg", //markerIcon2x,
+        iconUrl: "/icons/radiationIcon-red.svg", //markerIcon,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14],
+        tooltipAnchor: [14, 0],
         shadowUrl: markerShadow,
       });
 
-      mapInstance.value = Lref.value.map(theMap.value).setView([49.0069, 8.4037], 13); // Karlsruhe coordinates
+      mapInstance.value = Lref.value.map(theMap.value).setView([49.0069, 8.4037], 11); // Karlsruhe coordinates
     }
 
     tileLayer.value = Lref.value.tileLayer(
