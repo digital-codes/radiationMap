@@ -1,8 +1,7 @@
 <script setup lang="ts">
-import HelloWorld from './components/HelloWorld.vue'
-import Map from './components/GeoMapSimple.vue'
-import Map2 from './components/SimpleMap.vue'
-import {resampleTimeSeries} from './resample.ts'
+import Map from './components/SimpleMap2.vue'
+import { resampleTimeSeries } from './services/resample.ts'
+import type { SampleInput, SampleOutput } from './services/resample.ts'
 import {ref} from 'vue'
 
 // map stuff
@@ -15,7 +14,7 @@ const sensorClicked = (sensorId: string) => {
 };
 
 // sampling test stuff
-const output = ref<[string, number][]>([])
+const output = ref<SampleOutput[]>([])
 
 const input: SampleInput[] = [
   ["2025-12-21T10:02:00+01:00", "5"],
@@ -44,13 +43,10 @@ output.value = res;
   <div>
     <h2>Multi-Geiger Followup Test</h2>
     <p>{{ output }}</p>
-    <!--
-    <Map title="Multi-Geiger"/>
-    -->
     <div class="card">
-    <Map2 title="Multi-Geiger2"
+    <Map title="Multi-Geiger2"
     dataUrl="/data/radiationLatest.geojson" 
-    tileIdx="5"
+    :tileIdx="5"
     :dataProps="mapDataProps"
     @sensor_click="sensorClicked"
     />
