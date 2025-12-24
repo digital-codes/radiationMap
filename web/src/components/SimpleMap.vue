@@ -130,15 +130,15 @@ watch(
   () => props.dataUrl,
   async (newVal, oldVal) => {
     console.log("Data URL changed", newVal, oldVal);
-    await loadData();
+    await loadData(newVal);
   }
 );
 
-const loadData = async (): Promise<void> => {
-  console.log("Fetching data from", props.dataUrl);
-  const response = await fetch(props.dataUrl);
+const loadData = async (dataUrl: string): Promise<void> => {
+  console.log("Fetching data from", dataUrl);
+  const response = await fetch(dataUrl);
   if (!response.ok) {
-    throw new Error("Network response was not ok");
+    throw new Error("Network response was not ok from " + dataUrl);
   }
   geojsonData.value = (await response.json()) as FeatureCollection;
   // limit number of features
@@ -285,7 +285,7 @@ onMounted(async () => {
 
   if (tileLayer.value && mapInstance.value as any) tileLayer.value.addTo(mapInstance.value as any);
 
-  await loadData();
+  await loadData(props.dataUrl);
   // optionally load wind overlay
   // await loadUWind(); // ✅ correct place
   // await attachUWindOverlay(mapInstance.value, "/data/u100_cog.tif");

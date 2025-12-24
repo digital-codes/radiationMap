@@ -28,7 +28,7 @@ export async function attachUWindOverlay(map: L.Map, url = "/data/u100_cog.tif")
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
 
-  const overlay = L.imageOverlay(canvas.toDataURL(), map.getBounds(), { opacity: 0.6 });
+  const overlay = L.imageOverlay(canvas.toDataURL(), map.getBounds(), { opacity: .3 });
   overlay.addTo(map);
 
   async function draw(): Promise<void> {
