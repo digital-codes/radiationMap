@@ -102,12 +102,10 @@ if __name__ == "__main__":
     radSensors = [t for t in type_list if t.lower().startswith('radiation')]
     print(f"\nFound {len(radSensors)} radiation sensor types:")
     rad = []
-    for rs in radSensors:
-        print(f" - {rs}")                   
-        r = fetch_sensor_data_filtered(sensor_type=rs) # , country='DE')
-        print(f"  Fetched {len(r) if r else 0} records for sensor type '{rs}'.")
-        if r:
-            rad.extend(r)
+    r = fetch_sensor_data_filtered(sensor_type=radSensors) # , country='DE')
+    print(f"  Fetched {len(r) if r else 0} records for sensor type '{radSensors}'.")
+    if r:
+        rad.extend(r)
     if len(rad) > 0:
         print(f"\nFetched {len(rad)} records for filtered sensor data (Radiation).")
         # flatten and write to file radiation.csv/json
