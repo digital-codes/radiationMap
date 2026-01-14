@@ -2,12 +2,12 @@
   {
     "order": 0,
     "name": "file_id",
-    "type": "number"
+    "type": "int"
   },
   {
     "order": 1,
     "name": "sensor_id",
-    "type": "number"
+    "type": "int"
   },
   {
     "order": 2,

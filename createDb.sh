@@ -13,7 +13,7 @@ if [ ! -f "$SCHEMA_FILE" ]; then
 fi
 
 # build column definitions: map "number"->REAL, "timestamp"->TEXT, others->TEXT
-cols=$(jq -r '[.[] | "\"\(.name|gsub("\""; "\"\""))\" " + (if .type=="number" then "REAL" elif .type=="timestamp" then "TEXT" else "TEXT" end)] | join(", ")' "$SCHEMA_FILE")
+cols=$(jq -r '[.[] | "\"\(.name|gsub("\""; "\"\""))\" " + (if .type=="number" then "REAL" elif .type == "int" then "INTEGER" elif .type=="timestamp" then "TEXT" else "TEXT" end)] | join(", ")' "$SCHEMA_FILE")
 
 sql="CREATE TABLE IF NOT EXISTS \"$TABLE\" ($cols);"
 
