@@ -77,6 +77,6 @@ output.value = res;
   filter: drop-shadow(0 0 2em #42b883aa);
 }
 .card {
-  height: 400px;
+  height: 600px;
 }
 </style>

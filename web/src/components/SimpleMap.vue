@@ -17,6 +17,8 @@ import { attachUWindOverlay } from "../services/WindOverlay";
 //import { addUWindOverlay } from "../services/uWindOverlay"; // adjust path
 // let removeWind: (() => void) | null = null;
 
+//import { attachVelocityOverlay } from "../services/VelocityOverlay";
+
 import type { FeatureCollection } from "geojson";
 
 const emit = defineEmits<{
@@ -290,6 +292,7 @@ onMounted(async () => {
   // await loadUWind(); // ✅ correct place
   // await attachUWindOverlay(mapInstance.value, "/data/u100_cog.tif");
   await attachUWindOverlay(mapInstance.value as any);
+  //await attachVelocityOverlay(mapInstance.value as any);
 });
 
 onUnmounted(() => {

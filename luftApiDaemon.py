@@ -1,5 +1,6 @@
 # code to read sensor data from api at luftdaten.info and print it to console
 
+from turtle import left
 import requests
 import time 
 import pandas as pd
@@ -102,17 +103,27 @@ if __name__ == "__main__":
     radSensors = [t for t in type_list if t.lower().startswith('radiation')]
     print(f"\nFound {len(radSensors)} radiation sensor types:")
     rad = []
-    for rs in radSensors:
-        print(f" - {rs}")                   
-        r = fetch_sensor_data_filtered(sensor_type=rs) # , country='DE')
-        print(f"  Fetched {len(r) if r else 0} records for sensor type '{rs}'.")
-        if r:
-            rad.extend(r)
+    # for rs in radSensors:
+    #     print(f" - {rs}")                   
+    #     r = fetch_sensor_data_filtered(sensor_type=rs) # , country='DE')
+    #     print(f"  Fetched {len(r) if r else 0} records for sensor type '{rs}'.")
+    #     if r:
+    #         rad.extend(r)
+    r = fetch_sensor_data_filtered(sensor_type=radSensors) # , country='DE')
+    print(f"  Fetched {len(r) if r else 0} records for sensor type '{radSensors}'.")
+    if r:
+        rad.extend(r)
     if len(rad) > 0:
         print(f"\nFetched {len(rad)} records for filtered sensor data (Radiation).")
         # flatten and write to file radiation.csv/json
         df_rad = flattenData(rad, measurement_list)
         os.makedirs('data', exist_ok=True)
+        df_types = df_rad['sensor_type'].value_counts()
+        print("\nSensor type counts in fetched radiation data:")
+        for stype, count in df_types.items():
+            print(f" - {stype}: {count} records")
+        df_sensors = df_rad['sensor_id'].unique()
+        print(f"\nUnique sensors in fetched radiation data: {len(df_sensors)}")
         df_rad.sort_values(by=['sensor_id', 'timestamp'], inplace=True) 
         df_rad.to_json('data/radiation.json', orient='records', lines=True, force_ascii=False)
         df_rad.to_csv('data/radiation.csv', index=False)
@@ -196,10 +207,23 @@ if __name__ == "__main__":
         if to_insert:
             cur.executemany(insert_sql, to_insert)
             conn.commit()
-        after = cur.execute("SELECT COUNT(*) FROM radiation_data").fetchone()[0]
+        afterIns = cur.execute("SELECT COUNT(*) FROM radiation_data").fetchone()[0]
 
-        inserted = after - before
+        inserted = afterIns - before
         print(f"Inserted {inserted} new rows into {db_path} (table radiation_data).")
+
+        # ------------------------------------------------------------------
+        # Delete duplicates, keeping the row with the smallest `id`
+        # ------------------------------------------------------------------
+        # The sub‑query finds the minimum id for each (itemId, timestamp) group.
+        # Any row whose id is NOT in that list gets removed.
+        # use sqlite impicit rowid as unique identifier
+        cur.execute("DELETE FROM radiation_data WHERE rowid NOT IN (SELECT MIN(rowid) FROM radiation_data GROUP BY sensor_id, timestamp);")
+        conn.commit()
+
+        afterCln = cur.execute("SELECT COUNT(*) FROM radiation_data").fetchone()[0]
+        deleted = afterIns - afterCln
+        print(f"Left {afterCln} rows after deleting {deleted} in {db_path} (table radiation_data) after removing duplicates.")
 
         conn.close()
 
@@ -208,15 +232,28 @@ if __name__ == "__main__":
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
 
+        sensors = cur.execute("SELECT COUNT(DISTINCT sensor_id) FROM radiation_data").fetchone()[0]
+        print(f"Building GeoJSON FeatureCollection for latest data from {sensors} sensors.")
+
+        # latest row per sensor_id
         query = """
-        SELECT t.sensor_id, t.sensor_type, t.counts_per_minute, t.latitude, t.longitude, t.timestamp
-        FROM radiation_data t
+        SELECT
+            rd.sensor_id,
+            rd.sensor_type,
+            rd.counts_per_minute,
+            rd.latitude,
+            rd.longitude,
+            rd.timestamp
+        FROM radiation_data rd
         JOIN (
-            SELECT sensor_id, MAX(timestamp) AS max_ts
-            FROM radiation_data
-            GROUP BY sensor_id
-        ) m ON t.sensor_id = m.sensor_id AND t.timestamp = m.max_ts
+                SELECT sensor_id, MAX(timestamp) AS max_ts
+                FROM radiation_data
+                GROUP BY sensor_id
+            ) AS latest
+        ON rd.sensor_id = latest.sensor_id
+        AND rd.timestamp = latest.max_ts;
         """
+        
         cur.execute(query)
         rows = cur.fetchall()
         cols = [d[0] for d in cur.description] if cur.description else []

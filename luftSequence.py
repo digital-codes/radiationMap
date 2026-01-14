@@ -22,7 +22,6 @@ DB_NAME = "data/radiation.db" # sqlite3
 TZ = timezone('Europe/Berlin')
 
 
-
 if __name__ == "__main__":
 
         db_path = DB_NAME

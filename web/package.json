@@ -17,6 +17,7 @@
     "date-fns-tz": "^3.2.0",
     "geotiff": "^2.1.4-beta.1",
     "leaflet": "^1.9.4",
+    "leaflet-velocity-ts": "^1.2.0",
     "proj4": "^2.20.2",
     "vue": "^3.5.24"
   },
