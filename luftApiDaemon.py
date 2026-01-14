@@ -183,6 +183,14 @@ if __name__ == "__main__":
         conn = sqlite3.connect(db_path)
         cur = conn.cursor()
 
+        # remove all data older than 40 days 
+        dayLimit = 40 # keep max of 40 days
+        print(f"Deleting data older than {dayLimit} days from database.")
+        cur.execute(f"DELETE FROM radiation_data WHERE timestamp < datetime('now', '-{dayLimit} days')")
+        conn.commit()
+        cur.execute("VACUUM;")
+        conn.commit()
+
         # prepare columns and sqlite types based on dataframe dtypes
         cols = list(df_rad_relevant.columns)
 
