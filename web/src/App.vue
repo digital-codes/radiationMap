@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Map from './components/SimpleMap.vue'
+import Chart from './components/SimpleLine.vue'
 import { resampleTimeSeries } from './services/resample.ts'
 import type { SampleInput, SampleOutput } from './services/resample.ts'
 import {ref} from 'vue'
@@ -62,6 +63,11 @@ output.value = res;
     @sensor_click="sensorClicked"
     @plant_click="plantClicked"
     @data="dataLoaded"
+    />
+  </div>
+    <div class="card">
+    <Chart title="Sensor Values"
+    dataUrl="/data/series_day_31122.json" 
     />
   </div>
   </div>

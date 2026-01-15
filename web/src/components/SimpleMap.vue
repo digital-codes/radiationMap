@@ -203,61 +203,6 @@ const loadData = async (url: string): Promise<FeatureCollection> => {
   }
 
   return data
-  /*
-  if (sensorLayer.value && mapInstance.value as any) {
-    sensorLayer.value.removeFrom(mapInstance.value as any);
-  }
-
-  // create geojson layer
-  sensorLayer.value = Lref.value!.geoJSON(sensorData.value, {
-    onEachFeature: (feature, layer) => {
-      if (feature.properties && feature.properties[(props.dataProps && props.dataProps["name"]) || "name"]) {
-        let popupContent = "<b>" + feature.properties[(props.dataProps && props.dataProps["name"]) || "name"] + "</b><br>";
-        if (feature.properties[(props.dataProps && props.dataProps["description"]) || "description"])
-          popupContent += feature.properties[(props.dataProps && props.dataProps["description"]) || "description"] + "<br>";
-        if (feature.properties[(props.dataProps && props.dataProps["date"]) || "date"] && feature.properties[(props.dataProps && props.dataProps["value"]) || "value"])
-          popupContent += "Date: " + feature.properties[(props.dataProps && props.dataProps["date"]) || "date"] + ", CPM: " + feature.properties[(props.dataProps && props.dataProps["value"]) || "value"] + "<br>";
-        if (feature.properties[(props.dataProps && props.dataProps["img"]) || "img"])
-          popupContent += "<img src='" + feature.properties[(props.dataProps && props.dataProps["img"]) || "img"] + "' width='160'><br>" + "<em>" + feature.properties[(props.dataProps && props.dataProps["attribution"]) || "attribution"] + "</em><br>";
-        if (feature.properties[(props.dataProps && props.dataProps["url"]) || "url"])
-          popupContent += "<a href='" + feature.properties[(props.dataProps && props.dataProps["url"]) || "url"] + "' target=_blank>More</a><br>";
-        layer.bindPopup(popupContent);
-
-        if (feature.properties && feature.properties[(props.dataProps && props.dataProps["value"]) || "value"] != null && feature.properties[(props.dataProps && props.dataProps["value"]) || "value"] > 0) {
-          const raw = feature.properties[(props.dataProps && props.dataProps["value"]) || "value"];
-          const val = parseFloat(String(raw));
-          if (!Number.isNaN(val) && layer && typeof (layer as any).setIcon === "function") {
-            const color = val > 65 ? "red" : "green"; // >65 => red, else green
-            const icon = Lref.value!.icon({
-              iconRetinaUrl: `/radIcons/radiationIcon-${color}.svg`,
-              iconUrl: `/radIcons/radiationIcon-${color}.svg`,
-              iconSize: [28, 28],
-              iconAnchor: [14, 14],
-              popupAnchor: [0, -14],
-              tooltipAnchor: [14, 0],
-              shadowUrl: "/radIcons/radiationIcon-shadow.svg",
-              shadowSize: [31, 33],
-            });
-            (layer as any).setIcon(icon);
-          }
-        }
-      }
-
-      layer.on("click", () => {
-        const sensor = (feature.properties && (feature.properties as any).sensor_id) || "unknown";
-        const value = (feature.properties && (feature.properties as any)[(props.dataProps && props.dataProps["value"]) || "value"]) || "N/A";
-        console.log("Clicked feature:", sensor, value);
-        emit("sensor_click", String(sensor));
-      });
-    },
-  }) as LeafletGeoJSON;
-
-  if (sensorLayer.value && mapInstance.value as any) {
-    sensorLayer.value.addTo(mapInstance.value as any);
-  }
-
-  emit("data", { content: sensorData.value, id: theMap.value, L: Lref.value, map: mapInstance.value as any });
-*/
 };
 
 const addSensorLayer = (layerData: FeatureCollection): LeafletGeoJSON => {
@@ -267,7 +212,7 @@ const addSensorLayer = (layerData: FeatureCollection): LeafletGeoJSON => {
   const glayer = Lref.value!.geoJSON(layerData, {
     onEachFeature: (feature, layer) => {
       if (feature.properties && feature.properties[(props.dataProps && props.dataProps["name"]) || "name"]) {
-        console.log("Feature name:", feature.properties[(props.dataProps && props.dataProps["name"]) || "name"]);
+        // console.log("Feature name:", feature.properties[(props.dataProps && props.dataProps["name"]) || "name"]);
         let popupContent = "<b>" + feature.properties[(props.dataProps && props.dataProps["name"]) || "name"] + "</b><br>";
         if (feature.properties[(props.dataProps && props.dataProps["description"]) || "description"])
           popupContent += feature.properties[(props.dataProps && props.dataProps["description"]) || "description"] + "<br>";
@@ -324,13 +269,12 @@ const addPlantLayer = (layerData: FeatureCollection): LeafletGeoJSON => {
   const glayer: LeafletGeoJSON = Lref.value!.geoJSON(layerData, {
     onEachFeature: (feature, layer) => {
       if (feature.properties && feature.properties["name"]) {
-        console.log("Feature name:", feature.properties["name"]);
+        // console.log("Feature name:", feature.properties["name"]);
         let popupContent = "<b>" + feature.properties["name"] + "</b><br>";
         if (feature.properties["item"])
           popupContent += "<a href='" + feature.properties["item"] + "' target=_blank>More</a><br>";
         layer.bindPopup(popupContent);
 
-        console.log("Plant feature:", feature.properties["name"]);
         const icon = Lref.value!.icon({
           iconRetinaUrl: `/radIcons/nuclearPlant-white.svg`,
           iconUrl: `/radIcons/nuclearPlant-white.svg`,
