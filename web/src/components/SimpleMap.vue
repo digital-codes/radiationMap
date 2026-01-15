@@ -293,6 +293,23 @@ onMounted(async () => {
   // await attachUWindOverlay(mapInstance.value, "/data/u100_cog.tif");
   await attachUWindOverlay(mapInstance.value as any);
   //await attachVelocityOverlay(mapInstance.value as any);
+
+  const baseLayers = {
+    World: tileLayer.value as unknown as L.Layer   // <- cast
+  };
+
+  const overlays = {
+    Sensors: geoLayer.value as unknown as L.Layer   // <- cast
+    // Wind: windGeojson.value as unknown as L.Layer   // (if you uncomment later)
+  };
+
+  // control options – you can keep the explicit type if you like
+  const ctrlOpts: L.Control.LayersOptions = { collapsed: false };
+
+  // add the control (the `as any` you had on the map instance is fine if you need it)
+  L.control.layers(baseLayers, overlays, ctrlOpts)
+    .addTo(mapInstance.value as any);
+
 });
 
 onUnmounted(() => {
