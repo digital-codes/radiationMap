@@ -88,11 +88,12 @@ make sure database exists
 
 run python3.12 luftSequence.py
 
-should write timeseries for each sensor to data/series_\<sensor_id\>.json
+should write timeseries gor 2 periods (day, month) for each sensor to data/series_<period>_\<sensor_id\>.json
 
-should write plot for first 10 sensors to data/series_\<sensor_id\>.png 
+should write plot for first 10 sensors to data/series_\<sensor_id\>.png if param -png given
 
 ### 4) Install crontab
 */5 * * * * cd \<directory\> && /usr/bin/python3.12 \<directory\>/luftApiDaemon.py >> \<directory\>/luftApiDaemon.log 2>&1
 
-
+replace log with /dev/null if desired 
+install luftsequence in similar fashion, use like every 33minutes instead of every 5
