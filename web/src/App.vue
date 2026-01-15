@@ -11,8 +11,19 @@ const mapDataProps = {
   "name":"sensor_id", "date":"timestamp","value":"count_per_minute"
 }; 
 
+const sensorUrl = ref("/data/radiationLatest.geojson");
+const plantUrl = ref("/data/nuclear_facilities_clean.geojson");
+const windUrl = ref("/data/wind.geojson");
+
+const chartTitle = ref("Multi-Geiger Sensor Data");
+const dataUrl = ref("/data/sensor/null.json");
+
 const sensorClicked = (sensorId: string) => {
   console.log("Sensor clicked in parent:", sensorId);
+  chartTitle.value = `Sensor ${sensorId}`;
+  const filename = `/data/sensor/series_month_${sensorId}.json`;
+  console.log("Loading data from:", filename);
+  dataUrl.value = filename;
 };
 
 const plantClicked = (plantName: string) => {
@@ -55,9 +66,9 @@ output.value = res;
     <p>{{ output }}</p>
     <div class="card">
     <Map title="Multi-Geiger2"
-    sensorUrl="/data/radiationLatest.geojson" 
-    plantUrl="/data/nuclear_facilities_clean.geojson" 
-    windUrl="/data/wind.geojson" 
+    :sensorUrl="sensorUrl" 
+    :plantUrl="plantUrl" 
+    :windUrl="windUrl" 
     :tileIdx="5"
     :dataProps="mapDataProps"
     @sensor_click="sensorClicked"
@@ -66,8 +77,9 @@ output.value = res;
     />
   </div>
     <div class="card">
-    <Chart title="Sensor 31122 Monthly Data"
-    dataUrl="/data/series_month_31122.json" 
+    <Chart 
+    :title="chartTitle"
+    :dataUrl="dataUrl" 
     />
   </div>
   </div>

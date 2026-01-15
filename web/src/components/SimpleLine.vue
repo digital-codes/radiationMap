@@ -97,7 +97,10 @@ watch(
   () => props.dataUrl,
   async (newUrl, oldUrl) => {
     if (newUrl !== oldUrl) {
-      await loadData(newUrl);
+      const data = await loadData(newUrl);
+      dataLoaded.value = true;
+      await nextTick();
+      await showData(data);
     }
   }
 );
@@ -118,6 +121,7 @@ const loadData = async (url: string) => {
     }
   } catch (error) {
     console.error("Failed to load chart data for ", props.dataUrl, ": ", error);
+    return [];
   }
 };
 
@@ -138,6 +142,7 @@ const showData = async (data: any) => {
       return [row.timestamp, row.counts_per_minute];
     });
 
+    chartOptions.value.title! = { text: props.title, left: "center" };
 
     // set up a single line series (adjust options as needed)
     chartOptions.value.xAxis = {
