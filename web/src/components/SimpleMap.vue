@@ -225,13 +225,13 @@ const loadData = async (dataUrl: string): Promise<void> => {
           if (!Number.isNaN(val) && layer && typeof (layer as any).setIcon === "function") {
             const color = val > 65 ? "red" : "green"; // >65 => red, else green
             const icon = Lref.value!.icon({
-              iconRetinaUrl: `/icons/radiationIcon-${color}.svg`,
-              iconUrl: `/icons/radiationIcon-${color}.svg`,
+              iconRetinaUrl: `/radIcons/radiationIcon-${color}.svg`,
+              iconUrl: `/radIcons/radiationIcon-${color}.svg`,
               iconSize: [28, 28],
               iconAnchor: [14, 14],
               popupAnchor: [0, -14],
               tooltipAnchor: [14, 0],
-              shadowUrl: "/icons/radiationIcon-shadow.svg",
+              shadowUrl: "/radIcons/radiationIcon-shadow.svg",
               shadowSize: [31, 33],
             });
             (layer as any).setIcon(icon);
@@ -265,13 +265,13 @@ onMounted(async () => {
     delete (Lref.value!.Icon.Default.prototype as any)._getIconUrl;
 
     Lref.value!.Icon.Default.mergeOptions({
-      iconRetinaUrl: "/icons/radiationIcon-gray.svg", //markerIcon2x,
-      iconUrl: "/icons/radiationIcon-gray.svg", //markerIcon,
+      iconRetinaUrl: "/radIcons/radiationIcon-gray.svg", //markerIcon2x,
+      iconUrl: "/radIcons/radiationIcon-gray.svg", //markerIcon,
       iconSize: [28, 28],
       iconAnchor: [14, 14],
       popupAnchor: [0, -14],
       tooltipAnchor: [14, 0],
-      shadowUrl: "/icons/radiationIcon-shadow.svg", // markerShadow,
+      shadowUrl: "/radIcons/radiationIcon-shadow.svg", // markerShadow,
       shadowSize: [31, 33],
     });
 
