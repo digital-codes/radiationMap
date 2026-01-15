@@ -66,8 +66,8 @@ output.value = res;
     />
   </div>
     <div class="card">
-    <Chart title="Sensor Values"
-    dataUrl="/data/series_day_31122.json" 
+    <Chart title="Sensor 31122 Monthly Data"
+    dataUrl="/data/series_month_31122.json" 
     />
   </div>
   </div>
