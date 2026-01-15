@@ -1,6 +1,7 @@
 // import wind overlay from GeoTIFF
 import { fromUrl } from "geotiff";
 import L from "leaflet";
+import type { ImageOverlay as LeafletImageOverlay } from "leaflet";
 
 function lngLatToMercatorMeters(lng: number, lat: number): [number, number] {
   // EPSG:3857
@@ -12,7 +13,7 @@ function lngLatToMercatorMeters(lng: number, lat: number): [number, number] {
   return [x, y];
 }
 
-export async function attachUWindOverlay(map: L.Map, url = "/data/u100_cog.tif"): Promise<{ overlay: any; redraw: () => void }> {
+export async function attachUWindOverlay(map: L.Map, url = "/data/u100_cog.tif"): Promise<{ overlay: LeafletImageOverlay; redraw: () => void }> {
   const tiff = await fromUrl(url);
   const image = await tiff.getImage();
 
@@ -139,5 +140,5 @@ export async function attachUWindOverlay(map: L.Map, url = "/data/u100_cog.tif")
   map.on("zoomend", schedule);
   map.on("resize", schedule);
 
-  return { overlay, redraw: schedule };
+  return { overlay: overlay as LeafletImageOverlay, redraw: schedule };
 }

@@ -24,11 +24,14 @@ import type { FeatureCollection } from "geojson";
 const emit = defineEmits<{
   data: [payload: { content: FeatureCollection | null; id: HTMLElement | null; L: typeof L | null; map: LeafletMap | null }];
   sensor_click: [sensorId: string];
+  plant_click: [plantName: string];
 }>();
 
 const props = defineProps<{
   tileIdx?: number;
-  dataUrl: string;
+  sensorUrl: string;
+  plantUrl: string;
+  windUrl: string;
   dataName?: string;
   ariaLabel?: string;
   dataX?: string;
@@ -46,7 +49,8 @@ const mapInstance = ref<LeafletMap | null>(null);
 const theMap = ref<HTMLElement | null>(null);
 const Lref = ref<typeof L | null>(null);
 const tileLayer = ref<LeafletTileLayer | null>(null);
-const geoLayer = ref<LeafletGeoJSON | null>(null);
+const sensorLayer = ref<LeafletGeoJSON | null>(null);
+const plantLayer = ref<LeafletGeoJSON | null>(null);
 const windLayer = ref<LeafletImageOverlay | null>(null);
 
 // Helper function to safely cast map instance
@@ -65,8 +69,6 @@ import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 */
 
-
-const geojsonData = ref<FeatureCollection | null>(null);
 
 const tileSource = [
   {
@@ -129,31 +131,31 @@ const tileIdx = (() => {
 
 
 watch(
-  () => props.dataUrl,
+  () => props.sensorUrl,
   async (newVal, oldVal) => {
-    console.log("Data URL changed", newVal, oldVal);
+    console.log("Sensor URL changed", newVal, oldVal);
     await loadData(newVal);
   }
 );
 
-const loadData = async (dataUrl: string): Promise<void> => {
-  console.log("Fetching data from", dataUrl);
-  const response = await fetch(dataUrl);
+const loadData = async (url: string): Promise<FeatureCollection> => {
+  console.log("Fetching data from", url);
+  const response = await fetch(url);
   if (!response.ok) {
-    throw new Error("Network response was not ok from " + dataUrl);
+    throw new Error("Network response was not ok from " + url);
   }
-  geojsonData.value = (await response.json()) as FeatureCollection;
+  const data = (await response.json()) as FeatureCollection;
   // limit number of features
-  const features = geojsonData.value.features;
+  const features = data.features;
   const maxFeatures = 100;
   if (features.length > maxFeatures) {
-    geojsonData.value.features = features.slice(0, maxFeatures);
+    data.features = features.slice(0, maxFeatures);
     console.log(`Only first ${maxFeatures} features are loaded.`);
   }
 
   // check crs: if not WGS84, transform to WGS84
   // note: many GeoJSON files do not include `crs`; this code keeps compatibility
-  const crs = (geojsonData.value as any).crs;
+  const crs = (data as any).crs;
   console.log("CRS:", crs);
   if (crs && crs.properties) {
     const crsName = crs.properties.name as string | undefined;
@@ -162,7 +164,7 @@ const loadData = async (dataUrl: string): Promise<void> => {
       console.log("Transforming from", crsName);
       // make sure to update crs else will be transformed again on reload
       crs.properties.name = "WGS84";
-      const featuresLocal = geojsonData.value.features;
+      const featuresLocal = data.features;
 
       for (const f of featuresLocal) {
         const geom = f.geometry;
@@ -200,12 +202,14 @@ const loadData = async (dataUrl: string): Promise<void> => {
     }
   }
 
-  if (geoLayer.value && mapInstance.value as any) {
-    geoLayer.value.removeFrom(mapInstance.value as any);
+  return data
+  /*
+  if (sensorLayer.value && mapInstance.value as any) {
+    sensorLayer.value.removeFrom(mapInstance.value as any);
   }
 
   // create geojson layer
-  geoLayer.value = Lref.value!.geoJSON(geojsonData.value, {
+  sensorLayer.value = Lref.value!.geoJSON(sensorData.value, {
     onEachFeature: (feature, layer) => {
       if (feature.properties && feature.properties[(props.dataProps && props.dataProps["name"]) || "name"]) {
         let popupContent = "<b>" + feature.properties[(props.dataProps && props.dataProps["name"]) || "name"] + "</b><br>";
@@ -248,13 +252,115 @@ const loadData = async (dataUrl: string): Promise<void> => {
     },
   }) as LeafletGeoJSON;
 
-  if (geoLayer.value && mapInstance.value as any) {
-    geoLayer.value.addTo(mapInstance.value as any);
+  if (sensorLayer.value && mapInstance.value as any) {
+    sensorLayer.value.addTo(mapInstance.value as any);
   }
 
-  emit("data", { content: geojsonData.value, id: theMap.value, L: Lref.value, map: mapInstance.value as any });
+  emit("data", { content: sensorData.value, id: theMap.value, L: Lref.value, map: mapInstance.value as any });
+*/
+};
+
+const addSensorLayer = (layerData: FeatureCollection): LeafletGeoJSON => {
+
+  console.log("Adding sensor layer", layerData.features.length);
+  // create geojson layer
+  const glayer = Lref.value!.geoJSON(layerData, {
+    onEachFeature: (feature, layer) => {
+      if (feature.properties && feature.properties[(props.dataProps && props.dataProps["name"]) || "name"]) {
+        console.log("Feature name:", feature.properties[(props.dataProps && props.dataProps["name"]) || "name"]);
+        let popupContent = "<b>" + feature.properties[(props.dataProps && props.dataProps["name"]) || "name"] + "</b><br>";
+        if (feature.properties[(props.dataProps && props.dataProps["description"]) || "description"])
+          popupContent += feature.properties[(props.dataProps && props.dataProps["description"]) || "description"] + "<br>";
+        if (feature.properties[(props.dataProps && props.dataProps["date"]) || "date"] && feature.properties[(props.dataProps && props.dataProps["value"]) || "value"])
+          popupContent += "Date: " + feature.properties[(props.dataProps && props.dataProps["date"]) || "date"] + ", CPM: " + feature.properties[(props.dataProps && props.dataProps["value"]) || "value"] + "<br>";
+        if (feature.properties[(props.dataProps && props.dataProps["img"]) || "img"])
+          popupContent += "<img src='" + feature.properties[(props.dataProps && props.dataProps["img"]) || "img"] + "' width='160'><br>" + "<em>" + feature.properties[(props.dataProps && props.dataProps["attribution"]) || "attribution"] + "</em><br>";
+        if (feature.properties[(props.dataProps && props.dataProps["url"]) || "url"])
+          popupContent += "<a href='" + feature.properties[(props.dataProps && props.dataProps["url"]) || "url"] + "' target=_blank>More</a><br>";
+        if (feature.properties[(props.dataProps && props.dataProps["item"]) || "item"])
+          popupContent += "<a href='" + feature.properties[(props.dataProps && props.dataProps["url"]) || "url"] + "' target=_blank>More</a><br>";
+        layer.bindPopup(popupContent);
+
+        if (feature.properties && feature.properties[(props.dataProps
+          && props.dataProps["value"]) || "value"] != null && feature.properties[(props.dataProps && props.dataProps["value"]) || "value"] > 0) {
+          const raw = feature.properties[(props.dataProps && props.dataProps["value"]) || "value"];
+          const val = parseFloat(String(raw));
+          if (!Number.isNaN(val) && layer && typeof (layer as any).setIcon === "function") {
+            const color = val > 65 ? "red" : "green"; // >65 => red, else green
+            const icon = Lref.value!.icon({
+              iconRetinaUrl: `/radIcons/radiationIcon-${color}.svg`,
+              iconUrl: `/radIcons/radiationIcon-${color}.svg`,
+              iconSize: [28, 28],
+              iconAnchor: [14, 14],
+              popupAnchor: [0, -14],
+              tooltipAnchor: [14, 0],
+              shadowUrl: "/radIcons/radiationIcon-shadow.svg",
+              shadowSize: [31, 33],
+            });
+            (layer as any).setIcon(icon);
+          }
+        }
+      }
+
+      layer.on("click", () => {
+        const sensor = (feature.properties && (feature.properties as any).sensor_id) || "unknown";
+        const value = (feature.properties && (feature.properties as any)[(props.dataProps && props.dataProps["value"]) || "value"]) || "N/A";
+        console.log("Clicked feature:", sensor, value);
+        emit("sensor_click", String(sensor));
+      });
+    },
+  }) as LeafletGeoJSON;
+
+  if (glayer && mapInstance.value as any) {
+    glayer.addTo(mapInstance.value as any);
+  }
+
+  // emit("data", { content: sensorData.value, id: theMap.value, L: Lref.value, map: mapInstance.value as any });
+  return glayer
+};
+const addPlantLayer = (layerData: FeatureCollection): LeafletGeoJSON => {
+  console.log("Adding plant layer", layerData.features.length);
+  // create geojson layer
+  const glayer: LeafletGeoJSON = Lref.value!.geoJSON(layerData, {
+    onEachFeature: (feature, layer) => {
+      if (feature.properties && feature.properties["name"]) {
+        console.log("Feature name:", feature.properties["name"]);
+        let popupContent = "<b>" + feature.properties["name"] + "</b><br>";
+        if (feature.properties["item"])
+          popupContent += "<a href='" + feature.properties["item"] + "' target=_blank>More</a><br>";
+        layer.bindPopup(popupContent);
+
+        console.log("Plant feature:", feature.properties["name"]);
+        const icon = Lref.value!.icon({
+          iconRetinaUrl: `/radIcons/nuclearPlant-white.svg`,
+          iconUrl: `/radIcons/nuclearPlant-white.svg`,
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+          popupAnchor: [0, -14],
+          tooltipAnchor: [14, 0],
+          shadowUrl: "/radIcons/nuclearPlant-shadow.svg",
+          shadowSize: [31, 33],
+        });
+        (layer as any).setIcon(icon);
+      }
+
+      layer.on("click", () => {
+        const plant = (feature.properties && (feature.properties as any).name) || "unknown";
+        console.log("Clicked plant feature:", plant);
+        emit("plant_click", String(plant));
+      });
+    },
+  }) as LeafletGeoJSON;
+
+  if (glayer && mapInstance.value as any) {
+    glayer.addTo(mapInstance.value as any);
+  }
+  return glayer
+  // emit("data", { content: sensorData.value, id: theMap.value, L: Lref.value, map: mapInstance.value as any });
 
 };
+
+
 
 onMounted(async () => {
   console.log("Map mounted");
@@ -287,11 +393,24 @@ onMounted(async () => {
 
   if (tileLayer.value && mapInstance.value as any) tileLayer.value.addTo(mapInstance.value as any);
 
-  await loadData(props.dataUrl);
+  if (sensorLayer.value && mapInstance.value as any) {
+    sensorLayer.value.removeFrom(mapInstance.value as any);
+  }
+  if (plantLayer.value && mapInstance.value as any) {
+    plantLayer.value.removeFrom(mapInstance.value as any);
+  }
+  const sensorData = await loadData(props.sensorUrl);
+  sensorLayer.value = addSensorLayer(sensorData);
+  const plantData = await loadData(props.plantUrl);
+  console.log("Plant data loaded", plantData);
+  plantLayer.value = addPlantLayer(plantData);
+
   // optionally load wind overlay
   // await loadUWind(); // ✅ correct place
   // await attachUWindOverlay(mapInstance.value, "/data/u100_cog.tif");
-  await attachUWindOverlay(mapInstance.value as any);
+  //const { overlay: wl, redraw: wr } = await attachUWindOverlay(mapInstance.value as any);
+  const { overlay: wl } = await attachUWindOverlay(mapInstance.value as any);
+  windLayer.value = wl;
   //await attachVelocityOverlay(mapInstance.value as any);
 
   const baseLayers = {
@@ -299,25 +418,28 @@ onMounted(async () => {
   };
 
   const overlays = {
-    Sensors: geoLayer.value as unknown as L.Layer   // <- cast
-    // Wind: windGeojson.value as unknown as L.Layer   // (if you uncomment later)
+    Sensors: sensorLayer.value as unknown as L.Layer,   // <- cast
+    Plants: plantLayer.value as unknown as L.Layer,   // <- cast
+    Wind: windLayer.value as unknown as L.Layer   // (if you uncomment later)
   };
 
   // control options – you can keep the explicit type if you like
-  const ctrlOpts: L.Control.LayersOptions = { collapsed: false };
+  const ctrlOpts: L.Control.LayersOptions = {
+    collapsed: true,        // true = collapsible, false = always open
+    position: 'topright'    // 'topleft', 'bottomleft', etc.
+  }
 
   // add the control (the `as any` you had on the map instance is fine if you need it)
-  L.control.layers(baseLayers, overlays, ctrlOpts)
-    .addTo(mapInstance.value as any);
+  L.control.layers(baseLayers, overlays, ctrlOpts).addTo(mapInstance.value as any);
 
 });
 
 onUnmounted(() => {
   console.log("Map unmounted");
   if (!mapInstance.value as any) return;
-  if (geoLayer.value) {
+  if (sensorLayer.value) {
     try {
-      geoLayer.value.clearLayers?.();
+      sensorLayer.value.clearLayers?.();
     } catch {
       // ignore
     }
@@ -325,8 +447,11 @@ onUnmounted(() => {
   if (tileLayer.value && mapInstance.value as any) {
     tileLayer.value.removeFrom(mapInstance.value as any);
   }
-  if (geoLayer.value && mapInstance.value as any) {
-    geoLayer.value.removeFrom(mapInstance.value as any);
+  if (sensorLayer.value && mapInstance.value as any) {
+    sensorLayer.value.removeFrom(mapInstance.value as any);
+  }
+  if (plantLayer.value && mapInstance.value as any) {
+    plantLayer.value.removeFrom(mapInstance.value as any);
   }
   if (windLayer.value && mapInstance.value as any) {
     windLayer.value.removeFrom(mapInstance.value as any);
@@ -352,22 +477,22 @@ onUnmounted(() => {
   position: absolute;
   right: 12px;
   bottom: 24px;
-  background: rgba(255,255,255,0.85);
+  background: rgba(255, 255, 255, 0.85);
   padding: 10px 12px;
   border-radius: 10px;
   font: 12px/1.2 system-ui, sans-serif;
 }
+
 .wind-legend .bar {
   width: 180px;
   height: 10px;
   border-radius: 6px;
-  background: linear-gradient(90deg, rgba(0,0,255,0.9), rgba(0,0,0,0), rgba(255,0,0,0.9));
+  background: linear-gradient(90deg, rgba(0, 0, 255, 0.9), rgba(0, 0, 0, 0), rgba(255, 0, 0, 0.9));
 }
+
 .wind-legend .labels {
   display: flex;
   justify-content: space-between;
   margin-top: 6px;
 }
-
-
 </style>

@@ -14,6 +14,10 @@ const sensorClicked = (sensorId: string) => {
   console.log("Sensor clicked in parent:", sensorId);
 };
 
+const plantClicked = (plantName: string) => {
+  console.log("Plant clicked in parent:", plantName);
+};
+
 const dataLoaded = (payload: { content: any; id: HTMLElement | null; L: typeof L | null; map: any | null }) => {
   console.log("Data loaded in parent:", payload);
 };
@@ -50,10 +54,13 @@ output.value = res;
     <p>{{ output }}</p>
     <div class="card">
     <Map title="Multi-Geiger2"
-    dataUrl="/data/radiationLatest.geojson" 
+    sensorUrl="/data/radiationLatest.geojson" 
+    plantUrl="/data/nuclear_facilities_clean.geojson" 
+    windUrl="/data/wind.geojson" 
     :tileIdx="5"
     :dataProps="mapDataProps"
     @sensor_click="sensorClicked"
+    @plant_click="plantClicked"
     @data="dataLoaded"
     />
   </div>
