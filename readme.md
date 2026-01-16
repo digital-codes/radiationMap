@@ -93,7 +93,24 @@ should write timeseries gor 2 periods (day, month) for each sensor to data/serie
 should write plot for first 10 sensors to data/series_\<sensor_id\>.png if param -png given
 
 ### 4) Install crontab
-*/5 * * * * cd \<directory\> && /usr/bin/python3.12 \<directory\>/luftApiDaemon.py >> \<directory\>/luftApiDaemon.log 2>&1
 
-replace log with /dev/null if desired 
-install luftsequence in similar fashion, use like every 33minutes instead of every 5
+#### Data preparation jobs (user <your datascientist>)
+
+luftApiDaemon every 5 minutes
+
+> */5 * * * * cd /home/okl/luftdaten/ && /usr/bin/python3.12 /home/okl/luftdaten/luftApiDaemon.py >> /dev/null 2>&1
+
+luftsequence like every 33minutes instead of every 5
+
+> */32 * * * * cd /home/okl/luftdaten/ && /usr/bin/python3.12 /home/okl/luftdaten/luftSequence.py >> /dev/null 2>&1
+
+
+replace directories with your user directory and log with /dev/null if desired 
+
+#### Copy jobs (user apache)
+Copy results to web directory 
+
+> */12 * * * * /bin/cp /home/okl/luftdaten/data/series_*.json /var/www/html/radiationMap/data/sensor/  > /dev/null 2>&1
+
+> */12 * * * * /bin/cp /home/okl/luftdaten/data/*.geojson /var/www/html/radiationMap/data/  > /dev/null 2>&1
+
