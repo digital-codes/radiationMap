@@ -121,6 +121,7 @@ const loadData = async (url: string) => {
     }
   } catch (error) {
     console.error("Failed to load chart data for ", props.dataUrl, ": ", error);
+    alert("No timeseries available for this device")
     return [];
   }
 };

@@ -16,7 +16,7 @@ const plantUrl = ref("/data/nuclear_facilities_clean.geojson");
 const windUrl = ref("/data/wind.geojson");
 
 const chartTitle = ref("Multi-Geiger Sensor Data");
-const dataUrl = ref("/data/sensor/null.json");
+const dataUrl = ref("/data/sensor/series_month_57613.json");
 
 const sensorClicked = (sensorId: string) => {
   console.log("Sensor clicked in parent:", sensorId);
