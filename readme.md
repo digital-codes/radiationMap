@@ -110,7 +110,7 @@ replace directories with your user directory and log with /dev/null if desired
 #### Copy jobs (user apache)
 Copy results to web directory 
 
-**Make sure webserver can read your user directory!!! **
+**Make sure webserver can read your user directory!!!**
 
 > */12 * * * * /bin/cp /home/okl/luftdaten/data/series_*.json /var/www/html/radiationMap/data/sensor/  > /dev/null 2>&1
 
