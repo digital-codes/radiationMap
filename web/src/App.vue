@@ -61,10 +61,12 @@ output.value = res;
 </script>
 
 <template>
-  <div>
-    <h2>Multi-Geiger Followup Test</h2>
-    <p>{{ output }}</p>
-    <div class="card">
+  <div class="app">
+    <div class="hdr">
+    <h2>Geiger Map</h2>
+    <p>Use layer controls to toggle map layers. Click on sensor to show timeseries</p>
+    </div>
+    <div class="map">
     <Map title="Multi-Geiger2"
     :sensorUrl="sensorUrl" 
     :plantUrl="plantUrl" 
@@ -76,12 +78,16 @@ output.value = res;
     @data="dataLoaded"
     />
   </div>
-    <div class="card">
+    <div class="chart">
     <Chart 
     :title="chartTitle"
     :dataUrl="dataUrl" 
     />
   </div>
+    <div class="ftr">
+    <p>Imprint: bla bla</p>
+    <p><a href="https://github.com/digital-codes/radiationMap/" target="_blank" rel="noopener noreferrer">GitHub Repository</a></p>
+    </div>
   </div>
   <!--  
   <HelloWorld msg="Empty template" />
@@ -89,6 +95,64 @@ output.value = res;
 </template>
 
 <style scoped>
+
+.app {
+  font-family: Avenir, Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-align: center;
+  color: #2c3e50;
+  margin-top: 0px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  max-width:1200px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  padding:0;
+  padding-left:1rem;
+  padding-right:1rem;
+  box-sizing: border-box;
+}
+
+.map {
+  min-height: 300px;
+  width:100%;
+  height: 50%;
+  box-sizing: border-box;
+}
+
+.chart {
+  min-height: 200px;
+  width:100%;
+  height: 30%;
+  box-sizing: border-box;
+}
+
+.hdr, .ftr {
+  line-height: 1.15em;
+  margin: 0;
+  padding: .2em;
+  background-color: #f0f0f0;
+  height:10%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.hdr p, .ftr p {
+  margin: 0;
+  padding: 0;
+  font-size: 1rem;
+}
+
+.hdr h2 {
+  margin: 0;
+  padding: 0;
+  font-size: 1.2rem;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
@@ -100,8 +164,5 @@ output.value = res;
 }
 .logo.vue:hover {
   filter: drop-shadow(0 0 2em #42b883aa);
-}
-.card {
-  height: 600px;
 }
 </style>

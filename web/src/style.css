@@ -64,7 +64,7 @@ button:focus-visible {
   height:100vh;
   box-sizing: border-box;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 0;
   text-align: center;
 }
 

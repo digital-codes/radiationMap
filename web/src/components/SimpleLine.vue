@@ -164,7 +164,7 @@ const showData = async (data: any) => {
         smooth: true,
         showSymbol: false,
         //sampling: "lttb",
-        data: seriesData,
+        data: seriesData.map(([ts, val]) => [ts, val != null ? Math.round(Number(val)) : val]),
         lineStyle: { width: 2 },
         //areaStyle: {},
       },
@@ -206,14 +206,16 @@ onMounted(async () => {
 </script>
 
 <template>
-  <v-chart v-if="dataLoaded" ref="theChart" :option="chartOptions" :style="{ height: '100%' }" 
+  <v-chart class="timeseries" v-if="dataLoaded" ref="theChart" :option="chartOptions" 
     :init-options="{ renderer: 'canvas' }" autoresize  @ready="onChartReady">
   </v-chart>
 </template>
 
 <style scoped>
-.chart-template {
-  display: flex;
+.timeseries {
+  width:100%;
+  height:100%;
+  display: block;
   justify-content: center;
   align-items: center;
 }

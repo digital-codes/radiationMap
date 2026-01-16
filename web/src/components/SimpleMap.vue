@@ -375,6 +375,7 @@ onMounted(async () => {
 
   // add the control (the `as any` you had on the map instance is fine if you need it)
   L.control.layers(baseLayers, overlays, ctrlOpts).addTo(mapInstance.value as any);
+  
 
 });
 
