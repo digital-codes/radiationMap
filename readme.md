@@ -78,7 +78,7 @@ make sure files data/sensor_types.json and data/measurement_items.json exist
 
 run python3.12 luftApiDaemon.py 
 
-should update database and write some files data directory.
+should update database and write some files to data directory.
 
 check data/radiation.csv and data/radiation.geojson
 
@@ -88,7 +88,7 @@ make sure database exists
 
 run python3.12 luftSequence.py
 
-should write timeseries gor 2 periods (day, month) for each sensor to data/series_<period>_\<sensor_id\>.json
+should write timeseries for 2 periods (day, month) for each sensor to data/series_<period>_\<sensor_id\>.json
 
 should write plot for first 10 sensors to data/series_\<sensor_id\>.png if param -png given
 
@@ -100,7 +100,7 @@ luftApiDaemon every 5 minutes
 
 > */5 * * * * cd /home/okl/luftdaten/ && /usr/bin/python3.12 /home/okl/luftdaten/luftApiDaemon.py >> /dev/null 2>&1
 
-luftsequence like every 33minutes instead of every 5
+luftsequence like every 32 minutes instead of every 5
 
 > */32 * * * * cd /home/okl/luftdaten/ && /usr/bin/python3.12 /home/okl/luftdaten/luftSequence.py >> /dev/null 2>&1
 
