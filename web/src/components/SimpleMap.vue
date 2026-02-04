@@ -13,11 +13,13 @@ import "leaflet/dist/leaflet.css";
 // coordinate conversion
 import proj4 from "proj4";
 
-import { attachUWindOverlay } from "../services/WindOverlay";
+//import { attachUWindOverlay } from "../services/WindOverlay";
 //import { addUWindOverlay } from "../services/uWindOverlay"; // adjust path
 // let removeWind: (() => void) | null = null;
 
 //import { attachVelocityOverlay } from "../services/VelocityOverlay";
+
+import { WindTileLayer } from "../services/WindTiles";
 
 import type { FeatureCollection } from "geojson";
 
@@ -52,6 +54,7 @@ const tileLayer = ref<LeafletTileLayer | null>(null);
 const sensorLayer = ref<LeafletGeoJSON | null>(null);
 const plantLayer = ref<LeafletGeoJSON | null>(null);
 const windLayer = ref<LeafletImageOverlay | null>(null);
+const windTileLayer = ref<L.TileLayer | null>(null);
 
 // Helper function to safely cast map instance
 //const safeMap = () => mapInstance.value as LeafletMap;
@@ -349,12 +352,16 @@ onMounted(async () => {
   console.log("Plant data loaded", plantData);
   plantLayer.value = addPlantLayer(plantData);
 
+  const windTiles = WindTileLayer()
+  windTiles.addTo(mapInstance.value as any)
+  windTileLayer.value = windTiles
+
   // optionally load wind overlay
   // await loadUWind(); // ✅ correct place
   // await attachUWindOverlay(mapInstance.value, "/data/u100_cog.tif");
   //const { overlay: wl, redraw: wr } = await attachUWindOverlay(mapInstance.value as any);
-  const { overlay: wl } = await attachUWindOverlay(mapInstance.value as any);
-  windLayer.value = wl;
+  //const { overlay: wl } = await attachUWindOverlay(mapInstance.value as any);
+  //windLayer.value = wl;
   //await attachVelocityOverlay(mapInstance.value as any);
 
   const baseLayers = {
@@ -364,7 +371,7 @@ onMounted(async () => {
   const overlays = {
     Sensors: sensorLayer.value as unknown as L.Layer,   // <- cast
     Plants: plantLayer.value as unknown as L.Layer,   // <- cast
-    Wind: windLayer.value as unknown as L.Layer   // (if you uncomment later)
+    Wind: windTileLayer.value as unknown as L.Layer   // (if you uncomment later)
   };
 
   // control options – you can keep the explicit type if you like
@@ -401,7 +408,9 @@ onUnmounted(() => {
   if (windLayer.value && mapInstance.value as any) {
     windLayer.value.removeFrom(mapInstance.value as any);
   }
-  mapInstance.value = null;
+  if (windTileLayer.value && mapInstance.value as any) {
+    windTileLayer.value.removeFrom(mapInstance.value as any);
+  }
 });
 </script>
 
