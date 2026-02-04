@@ -336,11 +336,11 @@ tiles_dir = Path("wind_tiles")
 tiles_dir.mkdir(exist_ok=True)
 
 # Generate tiles for zoom levels
-zoom_levels = [1, 2, 3, 4, 5]
+zoom_levels = [1, 2, 3, 4, 5, 6]
 
 # parameters to control output size/quality
-MAX_FEATURES_PER_TILE = 500       # hard cap per tile
-TARGET_FEATURES_PER_TILE = 300    # if N>MAX, downsample to this many
+MAX_FEATURES_PER_TILE = 300       # hard cap per tile
+TARGET_FEATURES_PER_TILE = 200    # if N>MAX, downsample to this many
 LAT_LON_PREC = 4                  # decimal places for lat/lon
 VEL_PREC = 2                      # decimal places for u/v/speed
 DIR_PREC = 1                      # decimal places for direction

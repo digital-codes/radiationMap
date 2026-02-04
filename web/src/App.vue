@@ -64,7 +64,7 @@ output.value = res;
   <div class="app">
     <div class="hdr">
     <h2>Geiger Map</h2>
-    <p>Use layer controls to toggle map layers. Wind only for zoom levels 1-5. Click on sensor to show timeseries</p>
+    <p>Use layer controls to toggle map layers. Wind only for zoom levels 1-6. Click on sensor to show timeseries</p>
     </div>
     <div class="map">
     <Map title="Multi-Geiger2"
