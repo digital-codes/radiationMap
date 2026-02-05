@@ -11,6 +11,8 @@ from pathlib import Path
 import gzip
 import matplotlib.pyplot as plt
 
+GENERATE_VECTORTILES = False
+GENERATE_RASTERTILES = True
 
 # reference:  "https://charts.ecmwf.int/products/medium-wind-100m" +  f"?base_time={base_time}&projection=opencharts_europe&valid_time={base_time}"
 
@@ -29,7 +31,8 @@ day_date = slot_start.strftime("%Y%m%d")
 slot = f"{slot_hour:02d}z"
 file_start = slot_start.strftime("%Y%m%d%H%M%S")
 prefix = "https://data.ecmwf.int/forecasts/"
-postfix = "-6h-oper-fc.grib2"
+#postfix = "-6h-oper-fc.grib2"
+postfix = "-12h-oper-fc.grib2"
 primary_url = f"{prefix}{day_date}/{slot}/aifs-single/0p25/oper/{file_start}{postfix}"
 
 def _url_exists(url):
@@ -44,11 +47,12 @@ def _url_exists(url):
     except Exception:
         return False
 
-# If primary file missing, try a fallback 12 hours earlier
+# If primary file missing, try a fallback some hours earlier
+fallback_period = datetime.timedelta(hours=12)
 if _url_exists(primary_url):
     print("Remote GRIB URL (primary):", primary_url)
 else:
-    fallback_slot_start = slot_start - datetime.timedelta(hours=12)
+    fallback_slot_start = slot_start - fallback_period
     fb_day = fallback_slot_start.strftime("%Y%m%d")
     fb_hour = (fallback_slot_start.hour // 6) * 6
     fb_slot = f"{fb_hour:02d}z"
@@ -56,18 +60,17 @@ else:
     fallback_url = f"{prefix}{fb_day}/{fb_slot}/aifs-single/0p25/oper/{fb_file_start}{postfix}"
 
     if _url_exists(fallback_url):
-        print("Primary not available, using fallback (-12h):", fallback_url)
+        print("Primary not available, using fallback:", fallback_url)
         # switch slot_start/hour so subsequent code builds the fallback filename/url
         slot_start = fallback_slot_start
         slot_hour = fb_hour
     else:
-        print("Neither primary nor fallback GRIB found; will attempt primary URL:", primary_url) # build strings used in the path/filename
+        print("Neither primary nor fallback GRIB found; Stop") 
+        exit()
 day_date = slot_start.strftime("%Y%m%d")        # e.g. 20260204
 slot = f"{slot_hour:02d}z"                      # e.g. "00z", "06z", "12z", "18z"
 file_start = slot_start.strftime("%Y%m%d%H%M%S")# e.g. 20260204000000
 
-prefix = "https://data.ecmwf.int/forecasts/"
-postfix = "-6h-oper-fc.grib2"
 
 # full remote URL to the GRIB file
 remote_url = f"{prefix}{day_date}/{slot}/aifs-single/0p25/oper/{file_start}{postfix}"
@@ -351,204 +354,210 @@ global_lat_max = float(np.nanmax(lats))
 global_lon_min = float(np.nanmin(lons))
 global_lon_max = float(np.nanmax(lons))
 
-for zoom in zoom_levels:
-    print(f"Generating tiles for zoom level {zoom}...")
-    zoom_dir = tiles_dir / str(zoom)
-    zoom_dir.mkdir(exist_ok=True)
-    
-    # Determine tile range covering the data by checking all four corners
-    tx1, ty1 = latlon_to_tile(global_lat_min, global_lon_min, zoom)
-    tx2, ty2 = latlon_to_tile(global_lat_min, global_lon_max, zoom)
-    tx3, ty3 = latlon_to_tile(global_lat_max, global_lon_min, zoom)
-    tx4, ty4 = latlon_to_tile(global_lat_max, global_lon_max, zoom)
-    min_x = min(tx1, tx2, tx3, tx4)
-    max_x = max(tx1, tx2, tx3, tx4)
-    min_y = min(ty1, ty2, ty3, ty4)
-    max_y = max(ty1, ty2, ty3, ty4)
-    
-    created = 0
-    for tx in range(min_x, max_x + 1):
-        x_dir = zoom_dir / str(tx)
-        x_dir.mkdir(exist_ok=True)
+# generate geojson 
+
+if GENERATE_VECTORTILES:
+
+    for zoom in zoom_levels:
+        print(f"Generating tiles for zoom level {zoom}...")
+        zoom_dir = tiles_dir / str(zoom)
+        zoom_dir.mkdir(exist_ok=True)
         
-        for ty in range(min_y, max_y + 1):
-            # Get tile bounds
-            tlat_min, tlon_min, tlat_max, tlon_max = tile_bounds(tx, ty, zoom)
+        # Determine tile range covering the data by checking all four corners
+        tx1, ty1 = latlon_to_tile(global_lat_min, global_lon_min, zoom)
+        tx2, ty2 = latlon_to_tile(global_lat_min, global_lon_max, zoom)
+        tx3, ty3 = latlon_to_tile(global_lat_max, global_lon_min, zoom)
+        tx4, ty4 = latlon_to_tile(global_lat_max, global_lon_max, zoom)
+        min_x = min(tx1, tx2, tx3, tx4)
+        max_x = max(tx1, tx2, tx3, tx4)
+        min_y = min(ty1, ty2, ty3, ty4)
+        max_y = max(ty1, ty2, ty3, ty4)
+        
+        created = 0
+        for tx in range(min_x, max_x + 1):
+            x_dir = zoom_dir / str(tx)
+            x_dir.mkdir(exist_ok=True)
             
-            # boolean mask of points in tile (vectorized)
-            in_tile = ((lats >= tlat_min) & (lats <= tlat_max) &
-                       (lons >= tlon_min) & (lons <= tlon_max) &
-                       ~mask_all)
-            
-            idx = np.flatnonzero(in_tile)
-            N = idx.size
-            if N == 0:
-                continue
-            
-            # If too many points, pick a deterministic random subset for even spread
-            if N > MAX_FEATURES_PER_TILE:
-                keep = TARGET_FEATURES_PER_TILE
-                seed = ((zoom & 0xFFFF) << 32) ^ ((tx & 0xFFFF) << 16) ^ (ty & 0xFFFF)
-                rng = np.random.default_rng(seed)
-                choose = rng.choice(idx, size=keep, replace=False)
-            else:
-                choose = idx  # use all
-            
-            # Convert flat indices back to 2D indices for fast indexing
-            rows, cols = np.unravel_index(choose, lats.shape)
-            tile_lats = lats[rows, cols]
-            tile_lons = lons[rows, cols]
-            tile_u = u_data[rows, cols]
-            tile_v = v_data[rows, cols]
-            tile_speed = speed[rows, cols]
-            
-            # Build features with reduced precision to save space
-            features = []
-            for i in range(tile_lats.size):
-                feature = {
-                    "type": "Feature",
-                    "geometry": {
-                        "type": "Point",
-                        "coordinates": [
-                            round(float(tile_lons[i]), LAT_LON_PREC),
-                            round(float(tile_lats[i]), LAT_LON_PREC),
-                        ],
-                    },
-                    "properties": {
-                        "u": round(float(tile_u[i]), VEL_PREC),
-                        "v": round(float(tile_v[i]), VEL_PREC),
-                        "speed": round(float(tile_speed[i]), VEL_PREC),
-                        "direction": round(float(math.degrees(math.atan2(tile_v[i], tile_u[i]))), DIR_PREC),
-                    },
-                }
-                features.append(feature)
-            
-            geojson = {"type": "FeatureCollection", "features": features}
+            for ty in range(min_y, max_y + 1):
+                # Get tile bounds
+                tlat_min, tlon_min, tlat_max, tlon_max = tile_bounds(tx, ty, zoom)
+                
+                # boolean mask of points in tile (vectorized)
+                in_tile = ((lats >= tlat_min) & (lats <= tlat_max) &
+                        (lons >= tlon_min) & (lons <= tlon_max) &
+                        ~mask_all)
+                
+                idx = np.flatnonzero(in_tile)
+                N = idx.size
+                if N == 0:
+                    continue
+                
+                # If too many points, pick a deterministic random subset for even spread
+                if N > MAX_FEATURES_PER_TILE:
+                    keep = TARGET_FEATURES_PER_TILE
+                    seed = ((zoom & 0xFFFF) << 32) ^ ((tx & 0xFFFF) << 16) ^ (ty & 0xFFFF)
+                    rng = np.random.default_rng(seed)
+                    choose = rng.choice(idx, size=keep, replace=False)
+                else:
+                    choose = idx  # use all
+                
+                # Convert flat indices back to 2D indices for fast indexing
+                rows, cols = np.unravel_index(choose, lats.shape)
+                tile_lats = lats[rows, cols]
+                tile_lons = lons[rows, cols]
+                tile_u = u_data[rows, cols]
+                tile_v = v_data[rows, cols]
+                tile_speed = speed[rows, cols]
+                
+                # Build features with reduced precision to save space
+                features = []
+                for i in range(tile_lats.size):
+                    feature = {
+                        "type": "Feature",
+                        "geometry": {
+                            "type": "Point",
+                            "coordinates": [
+                                round(float(tile_lons[i]), LAT_LON_PREC),
+                                round(float(tile_lats[i]), LAT_LON_PREC),
+                            ],
+                        },
+                        "properties": {
+                            "u": round(float(tile_u[i]), VEL_PREC),
+                            "v": round(float(tile_v[i]), VEL_PREC),
+                            "speed": round(float(tile_speed[i]), VEL_PREC),
+                            "direction": round(float(math.degrees(math.atan2(tile_v[i], tile_u[i]))), DIR_PREC),
+                        },
+                    }
+                    features.append(feature)
+                
+                geojson = {"type": "FeatureCollection", "features": features}
 
 
-            # Decompress in browser:
-            #// Browser-friendly decompression: DecompressionStream if available (Chromium/Firefox and recent Safari),
-            #// otherwise fall back to inflating the ArrayBuffer client-side (e.g. with pako).
-            #// Include pako on the page if you need the fallback:
-            #// <script src="https://cdn.jsdelivr.net/npm/pako@2/dist/pako.min.js"></script>
-            #//
-            #// Example usage in JS:
-            #// async function fetchGzJson(url) {
-            #//   const res = await fetch(url, { mode: 'cors' });
-            #//   if ('DecompressionStream' in self) {
-            #//     // Modern browsers (Chromium, Firefox, and recent Safari)
-            #//     const ds = res.body.pipeThrough(new DecompressionStream('gzip'));
-            #//     const text = await new Response(ds).text();
-            #//     return JSON.parse(text);
-            #//   } else {
-            #//     // Fallback for older Safari / browsers without DecompressionStream
-            #//     const buf = await res.arrayBuffer();
-            #//     // pako must be available (via CDN or bundled)
-            #//     const inflated = pako.inflate(new Uint8Array(buf), { to: 'string' });
-            #//     return JSON.parse(inflated);
-            #//   }
-            #// }
-            #//
-            #// // call it:
-            #// fetchGzJson('/tiles/3/1/2.json.gz').then(geojson => console.log(geojson)).catch(console.error);
-            #const res = await fetch('/tiles/3/1/2.json.gz', { mode: 'cors' });
-            #const ds = res.body.pipeThrough(new DecompressionStream('gzip'));
-            #const text = await new Response(ds).text();
-            #const geojson = JSON.parse(text);
-            #console.log(geojson); 
-            #created += 1
-            
-            # Save compressed tile to reduce disk/network size
-            tile_file = x_dir / f"{ty}.json.gz"
-            with gzip.open(tile_file, "wt", compresslevel=6) as f:
-                json.dump(geojson, f, separators=(",", ":"))
-            
-            created += 1
-    
-    total_files = len(list(zoom_dir.rglob("*.json.gz")))
-    print(f"  Generated {total_files} tiles (created this zoom: {created})")
+                # Decompress in browser:
+                #// Browser-friendly decompression: DecompressionStream if available (Chromium/Firefox and recent Safari),
+                #// otherwise fall back to inflating the ArrayBuffer client-side (e.g. with pako).
+                #// Include pako on the page if you need the fallback:
+                #// <script src="https://cdn.jsdelivr.net/npm/pako@2/dist/pako.min.js"></script>
+                #//
+                #// Example usage in JS:
+                #// async function fetchGzJson(url) {
+                #//   const res = await fetch(url, { mode: 'cors' });
+                #//   if ('DecompressionStream' in self) {
+                #//     // Modern browsers (Chromium, Firefox, and recent Safari)
+                #//     const ds = res.body.pipeThrough(new DecompressionStream('gzip'));
+                #//     const text = await new Response(ds).text();
+                #//     return JSON.parse(text);
+                #//   } else {
+                #//     // Fallback for older Safari / browsers without DecompressionStream
+                #//     const buf = await res.arrayBuffer();
+                #//     // pako must be available (via CDN or bundled)
+                #//     const inflated = pako.inflate(new Uint8Array(buf), { to: 'string' });
+                #//     return JSON.parse(inflated);
+                #//   }
+                #// }
+                #//
+                #// // call it:
+                #// fetchGzJson('/tiles/3/1/2.json.gz').then(geojson => console.log(geojson)).catch(console.error);
+                #const res = await fetch('/tiles/3/1/2.json.gz', { mode: 'cors' });
+                #const ds = res.body.pipeThrough(new DecompressionStream('gzip'));
+                #const text = await new Response(ds).text();
+                #const geojson = JSON.parse(text);
+                #console.log(geojson); 
+                #created += 1
+                
+                # Save compressed tile to reduce disk/network size
+                tile_file = x_dir / f"{ty}.json.gz"
+                with gzip.open(tile_file, "wt", compresslevel=6) as f:
+                    json.dump(geojson, f, separators=(",", ":"))
+                
+                created += 1
+        
+        total_files = len(list(zoom_dir.rglob("*.json.gz")))
+        print(f"  Generated {total_files} tiles (created this zoom: {created})")
 
-print(f"Wind barb tiles saved to {tiles_dir}/ (compressed .json.gz files)")
+    print(f"Wind barb tiles saved to {tiles_dir}/ (compressed .json.gz files)")
 
-# Generate raster PNG tiles with wind barbs (256x256 px tiles) in "raster_tiles" directory
-raster_dir = Path("raster_tiles")
-raster_dir.mkdir(exist_ok=True)
 
-TILE_PX = 256
-DPI = 100.0
+if GENERATE_RASTERTILES:
+    # Generate raster PNG tiles with wind barbs (256x256 px tiles) in "raster_tiles" directory
+    raster_dir = Path("raster_tiles")
+    raster_dir.mkdir(exist_ok=True)
 
-for zoom in zoom_levels:
-    print(f"Generating raster tiles for zoom level {zoom}...")
-    zoom_dir = raster_dir / str(zoom)
-    zoom_dir.mkdir(exist_ok=True)
+    TILE_PX = 256
+    DPI = 100.0
 
-    # Determine tile range covering the data (same approach as vector generation)
-    tx1, ty1 = latlon_to_tile(global_lat_min, global_lon_min, zoom)
-    tx2, ty2 = latlon_to_tile(global_lat_min, global_lon_max, zoom)
-    tx3, ty3 = latlon_to_tile(global_lat_max, global_lon_min, zoom)
-    tx4, ty4 = latlon_to_tile(global_lat_max, global_lon_max, zoom)
-    min_x = min(tx1, tx2, tx3, tx4)
-    max_x = max(tx1, tx2, tx3, tx4)
-    min_y = min(ty1, ty2, ty3, ty4)
-    max_y = max(ty1, ty2, ty3, ty4)
+    for zoom in zoom_levels:
+        print(f"Generating raster tiles for zoom level {zoom}...")
+        zoom_dir = raster_dir / str(zoom)
+        zoom_dir.mkdir(exist_ok=True)
 
-    created = 0
-    for tx in range(min_x, max_x + 1):
-        x_dir = zoom_dir / str(tx)
-        x_dir.mkdir(exist_ok=True)
+        # Determine tile range covering the data (same approach as vector generation)
+        tx1, ty1 = latlon_to_tile(global_lat_min, global_lon_min, zoom)
+        tx2, ty2 = latlon_to_tile(global_lat_min, global_lon_max, zoom)
+        tx3, ty3 = latlon_to_tile(global_lat_max, global_lon_min, zoom)
+        tx4, ty4 = latlon_to_tile(global_lat_max, global_lon_max, zoom)
+        min_x = min(tx1, tx2, tx3, tx4)
+        max_x = max(tx1, tx2, tx3, tx4)
+        min_y = min(ty1, ty2, ty3, ty4)
+        max_y = max(ty1, ty2, ty3, ty4)
 
-        for ty in range(min_y, max_y + 1):
-            # tile bounds
-            tlat_min, tlon_min, tlat_max, tlon_max = tile_bounds(tx, ty, zoom)
+        created = 0
+        for tx in range(min_x, max_x + 1):
+            x_dir = zoom_dir / str(tx)
+            x_dir.mkdir(exist_ok=True)
 
-            # boolean mask of points in tile
-            in_tile = ((lats >= tlat_min) & (lats <= tlat_max) &
-                       (lons >= tlon_min) & (lons <= tlon_max) &
-                       ~mask_all)
+            for ty in range(min_y, max_y + 1):
+                # tile bounds
+                tlat_min, tlon_min, tlat_max, tlon_max = tile_bounds(tx, ty, zoom)
 
-            idx = np.flatnonzero(in_tile)
-            N = idx.size
-            if N == 0:
-                continue
+                # boolean mask of points in tile
+                in_tile = ((lats >= tlat_min) & (lats <= tlat_max) &
+                        (lons >= tlon_min) & (lons <= tlon_max) &
+                        ~mask_all)
 
-            # deterministic downsample if too many points
-            if N > MAX_FEATURES_PER_TILE:
-                keep = TARGET_FEATURES_PER_TILE
-                seed = ((zoom & 0xFFFF) << 32) ^ ((tx & 0xFFFF) << 16) ^ (ty & 0xFFFF)
-                rng = np.random.default_rng(seed)
-                choose = rng.choice(idx, size=keep, replace=False)
-            else:
-                choose = idx
+                idx = np.flatnonzero(in_tile)
+                N = idx.size
+                if N == 0:
+                    continue
 
-            rows, cols = np.unravel_index(choose, lats.shape)
-            tile_lats = lats[rows, cols]
-            tile_lons = lons[rows, cols]
-            tile_u = u_data[rows, cols]
-            tile_v = v_data[rows, cols]
-            tile_speed = speed[rows, cols]
+                # deterministic downsample if too many points
+                if N > MAX_FEATURES_PER_TILE:
+                    keep = TARGET_FEATURES_PER_TILE
+                    seed = ((zoom & 0xFFFF) << 32) ^ ((tx & 0xFFFF) << 16) ^ (ty & 0xFFFF)
+                    rng = np.random.default_rng(seed)
+                    choose = rng.choice(idx, size=keep, replace=False)
+                else:
+                    choose = idx
 
-            # create figure sized to TILE_PX at DPI
-            fig = plt.figure(figsize=(TILE_PX / DPI, TILE_PX / DPI), dpi=DPI)
-            ax = fig.add_axes([0, 0, 1, 1])
-            ax.set_xlim(tlon_min, tlon_max)
-            ax.set_ylim(tlat_min, tlat_max)
-            ax.axis("off")
+                rows, cols = np.unravel_index(choose, lats.shape)
+                tile_lats = lats[rows, cols]
+                tile_lons = lons[rows, cols]
+                tile_u = u_data[rows, cols]
+                tile_v = v_data[rows, cols]
+                tile_speed = speed[rows, cols]
 
-            # background: small colored dots for speed (cheap rasterized rendering)
-            # use small square markers to roughly fill pixels
-            ax.scatter(tile_lons, tile_lats, c=tile_speed, cmap="viridis", s=3, marker="s", linewidths=0, rasterized=True)
+                # create figure sized to TILE_PX at DPI
+                fig = plt.figure(figsize=(TILE_PX / DPI, TILE_PX / DPI), dpi=DPI)
+                ax = fig.add_axes([0, 0, 1, 1])
+                ax.set_xlim(tlon_min, tlon_max)
+                ax.set_ylim(tlat_min, tlat_max)
+                ax.axis("off")
 
-            # barb length tuned by zoom (larger zoom -> longer barbs)
-            barb_length = 6 + max(0, zoom - 4)
-            ax.barbs(tile_lons, tile_lats, tile_u, tile_v, length=barb_length, linewidth=0.5, pivot="middle", color="k")
+                # background: small colored dots for speed (cheap rasterized rendering)
+                # use small square markers to roughly fill pixels
+                ax.scatter(tile_lons, tile_lats, c=tile_speed, cmap="viridis", s=3, marker="s", linewidths=0, rasterized=True)
 
-            out_file = x_dir / f"{ty}.png"
-            fig.savefig(out_file, dpi=DPI, transparent=True)
-            plt.close(fig)
+                # barb length tuned by zoom (larger zoom -> longer barbs)
+                barb_length = 6 + max(0, zoom - 4)
+                ax.barbs(tile_lons, tile_lats, tile_u, tile_v, length=barb_length, linewidth=0.5, pivot="middle", color="k")
 
-            created += 1
+                out_file = x_dir / f"{ty}.png"
+                fig.savefig(out_file, dpi=DPI, transparent=True)
+                plt.close(fig)
 
-    total_files = len(list(zoom_dir.rglob("*.png")))
-    print(f"  Generated {total_files} raster tiles (created this zoom: {created})")
+                created += 1
 
-print(f"Raster wind barb tiles saved to {raster_dir}/ (PNG files)")
+        total_files = len(list(zoom_dir.rglob("*.png")))
+        print(f"  Generated {total_files} raster tiles (created this zoom: {created})")
+
+    print(f"Raster wind barb tiles saved to {raster_dir}/ (PNG files)")
