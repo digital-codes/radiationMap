@@ -31,7 +31,7 @@ Frage an Reinhard: Die gleitende Farbskala bei den Sensor-Radiation-Buttons, wie
 # Farbe von Atomanlagen:
 Nuclear research reactor: kleiner vollfarbiger Kreis, farbe: rgb(159, 0, 195)
 kernkraftwerk: rgb(232, 0, 0)
-Stillgelegte AKW: kreisförmig mit rgb(232, 0, 0), Mitte weiß (siehe karte) 
+Stillgelegte AKW: kreisförmig mit rgb(232, 0, 0), Mitte weiß (siehe Karte) 
 
 # Umrechnung CPM in Mikrosievert: 
 Reinhard: ==> die Umrechnung cpm in µSv wird in dem Webseiten-Programm gemacht, die Konstante ist für jedes Rohr hinterlegt: let sv_factor = {'SBM-20': 1 / 2.47, 'SBM-19': 1 / 9.81888, 'Si22G': 0.081438, 'J306': 0.06536};
