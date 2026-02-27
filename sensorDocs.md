@@ -60,8 +60,8 @@ Reinhard: ==> bin der gleichen Meinung
 Jürgen: Es ist wichtig, dass die Daten vom Sensor weiterhin ihren gewohnten und etablierten Weg gehen und dann, nach wie vor, auch bei luftdaten.info archiviert werden. Daran wollen wir auf keinen Fall etwas ändern. Laut meinem Verständnis holt Reinhard bzw. Andreas die Daten parallel ab über ein Programmierinterface (API). Das wird in eine parallele Datenbank gegeben und dann visualisiert. 
 Reinhard: ==> genau so funktioniert das bei mir und so würde ich es auch weiter handhaben. Wenn wir nicht zu sensor.community senden, muss ja auch die Firmware angepasst werden.
 
-# neuer Server: 
-er muss all 5 min die Werte von sensor.community abholen und selber in eine Datenbank schreiben, die dann für die Web-Darstellung ausgelesen wird
+# Neuer Server: 
+Der neue Server muss alle 5 min die Werte von sensor.community abholen und selber in eine Datenbank schreiben, die dann für die Web-Darstellung ausgelesen wird. 
 
 Andreas: Warum wird im 5-Minuten-Intervall ausgelesen, ist nur Counts_pro_minute wichtig oder auf hv-pulses, was ist sample_time.
 Reinhard: ==> Wichtig sind nur die counts_pro_minute. Hv_pulses ist zum Debugger und sample-time sind immer etwa die 150sec
