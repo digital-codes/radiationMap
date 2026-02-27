@@ -78,9 +78,8 @@ Auf der Karte wird jede Zählstation mit dem Radioaktivitäts-Symbol angezeigt. 
 Hat der Sensor seit mind. 1 Stunde keine Daten mehr gesendet, so wird er dunkelgrau eingefärbt. Hat er über eine Woche nicht gesendet, wird er nicht mehr dargestellt.
 Die Karte ist standardmäßig auf Stuttgart ausgerichtet. Wenn der Aufruf der Webseite mit einer Stadt erfolgt (z.B: https://multigeiger.citysensor.de/Berlin), so wird die Karte auf diese Stadt zentriert.
 Wird statt dessen eine Sensornummer angegeben, so wird die Karte auf diesen Sensor zentriert und gleich die zugehörige Grafik angezeigt (z.B. für den Sensor Nr. 34188 ist der Aufruf dann: https://multigeiger.citysensor.de/34188).
-Bedienelemente
 
-Die Karte kann mit dem Mausrad oder den beiden Knöpfen +/- in der linken obere Ecke ein- und ausgezoomed werden.Mit gedrückter Maustaste läßt sich die Karte verschieben.
+Bedienelemente: Die Karte kann mit dem Mausrad oder den beiden Knöpfen +/- in der linken obere Ecke ein- und ausgezoomed werden. Mit gedrückter Maustaste läßt sich die Karte verschieben.
 
 Über der Karte befindet sich die Navigationsleiste mit folgenden Knöpfen/Eingabefeldern:
 
