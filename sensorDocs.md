@@ -68,7 +68,7 @@ Reinhard: ==> Wichtig sind nur die counts_pro_minute. Hv_pulses ist zum Debugger
 
 
 # Gesamtkarte/Wahlmöglichkeiten für die Nutzer/Legende: 
-Links oben kann über den Button "Zählrohre" der Nutzer einstellen, on er nur die Si22G-Rohre sehen will oder alle. Über den Button "AKWs/Anlagen" kann der Nutzer aktive, stillgelegte und sonstige Kraftwerke anzeigen lassen. Über den Button "Wind" kann er die aktuellen Windrichtungen und Windströme zuschalten, Über eine Suchmaske 
+Der Nutzer kann links oben  über den Button "Zählrohre" einstellen, on er nur die Si22G-Rohre sehen will oder alle Zählrohrtypen. Über den Button "AKWs/Anlagen" kann sich der Nutzer aktive, stillgelegte und sonstige Kraftwerke anzeigen lassen. Über den Button "Wind" kann er die aktuellen Windrichtungen und Windströme zuschalten, Über eine Suchmaske nach seinem Sensor (mit Nummer) suchen. Das alles sind gute Funktionen, die wir beibehalten sollten 
 
 # Unter dem Button "Info" steht wichtiges allgmeines zur Karte:
 (Das sollten wir übernehmen) 
