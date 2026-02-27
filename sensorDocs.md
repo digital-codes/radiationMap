@@ -1,8 +1,19 @@
 # Sensor documentation
 
+# aktuelle Arbeitsversion: 
+https://radiation.ok-lab-karlsruhe.de/
+
 # Einbindung in die Ecocurious-Seite (über iframe vom alten/neue Server)
 https://ecocurious.de/multigeiger-karte/
 Die Seite ist aktuell mit Rand eingebunden. Es wäre gut, wenn wir die neue Darstellung rechts und links randlos einbinden können 
+
+# Sensortypen: 
+Es gibt 3 verschiedenen Zählrohrtypen: Si22g, SDM19 und SDM20. 
+Reinhard: Ich würde sagen immer wenn ein Sensor das Wort "radiation" mit drin hat ist es einer von uns. Siehe:
+https://archive.sensor.community/2026-02-02/
+
+# Farbe der Open-Steetmap-Karte: 
+Bitte wieder das dezente grau! 
 
 # Farbe der Sensorsymbole auf der Karte in Anhängigkeit vom gemessenen Strahlungswert: 
 größer als 5 µSv: rgb(163, 47, 246)
@@ -15,16 +26,17 @@ offline: rgb(149, 149, 149)
 indoor: rgb(173, 211, 234)
 gleitende Übergänge zwischen den Farben 
 
+Frage an Reinhard: Die gleitende Farbskala bei den Sensor-Radiation-Buttons, wie hast du die programmiert (von grün nach rot)?  ==> das ist mit der Library D3.js erzeugt. Da gibt es sicher was ähnliches für Python.
+
 # Farbe von Atomanlagen:
 Nuclear research reactor: kleiner vollfarbiger Kreis, farbe: rgb(159, 0, 195)
 kernkraftwerk: rgb(232, 0, 0)
 Stillgelegte AKW: kreisförmig mit rgb(232, 0, 0), Mitte weiß (siehe karte) 
 
 # Umrechnung CPM in Mikrosievert: 
-==> die Umrechnung cpm in µSv wird in dem Webseiten-Programm gemacht, die Konstante ist für jedes Rohr hinterlegt:
-	 let sv_factor = {'SBM-20': 1 / 2.47, 'SBM-19': 1 / 9.81888, 'Si22G': 0.081438, 'J306': 0.06536};
-Umrechnung dann:
-	let uSvph = value < 0 ? -1 : value / 60 * sv_factor[x.name];         x.name ist der Name des Rohres aus dem Array sv_factor
+Reinhard: ==> die Umrechnung cpm in µSv wird in dem Webseiten-Programm gemacht, die Konstante ist für jedes Rohr hinterlegt: let sv_factor = {'SBM-20': 1 / 2.47, 'SBM-19': 1 / 9.81888, 'Si22G': 0.081438, 'J306': 0.06536};
+Umrechnung dann: let uSvph = value < 0 ? -1 : value / 60 * sv_factor[x.name];  x.name ist der Name des Rohres aus dem Array sv_factor
+(in der Mail vom 4.2.2026 von Reinhard)
 
 # Darstellung der Kurve pro Sensor: 
 Standartdarstellung, wenn man auf den Sensorbutton klickt: "Strahlung über einen Tag" (24 h ) . Über Buttons oben links kann man umschalten: Strahlung 30 Tage, 7 Tage. Es gibt also 3 verschiedenen Darstellungen. 
@@ -35,12 +47,30 @@ Es gibt die gemessenen Werte ("alle Werte") in einer hellgrünen Kurse und den g
 # Radonpeaks: 
 Mit den Skalen, so wie Reinhard sie gewählt hat, kann man den Radonpeak gut erkennen. Daher ist es gut, sie so beizubehalten. 
 
+# Wie lange sollen Messwerte archiviert werden? 
+Andreas: Darstellung Messwerte: Reicht es, die Historie von einer Woche vorzuhalten? Ich fände das ok. 
+Jürgen: => Verstehe ich das richtig? Danach sollen die Werte dann bei uns gelöscht werden? Wenn ja: Ich fände eine Woche schon sehr knapp. Damit ist es ja kaum möglich einen langsamen Anstieg zu sehen. 
+Reinhard: ==> Auch ich halte ein Woche für viel zu wenig. Wenn nur noch die Geigerwerte (und nicht alle Feinstaubwert, so wie bei mir) gelesen werden müssen, ist das Halten der Werte für 1 Jahr m.E. kein Problem 
+
+# Datenspeicherung/Download durch User 
+Reicht es, wenn User sich dann von einer Woche die Stundenmittelwerte abrufen und speichern könnten? 
+Jürgen: => Bei Stundenmittelwerte sieht man die Radon-Peaks nicht mehr richtig. Von dem her fände ich das schwierig. 
+Reinhard: ==> bin der gleichen Meinung
+Jürgen: Es ist wichtig, dass die Daten vom Sensor weiterhin ihren gewohnten und etablierten Weg gehen und dann, nach wie vor, auch bei luftdaten.info archiviert werden. Daran wollen wir auf keinen Fall etwas ändern. Laut meinem Verständnis holt Reinhard bzw. Andreas die Daten parallel ab über ein Programmierinterface (API). Das wird in eine parallele Datenbank gegeben und dann visualisiert. 
+Reinhard: ==> genau so funktioniert das bei mir und so würde ich es auch weiter handhaben. Wenn wir nicht zu sensor.community senden, muss ja auch die Firmware angepasst werden.
+
+# neuer Server: 
+er muss all 5 min die Werte von sensor.community abholen und selber in eine Datenbank schreiben, die dann für die Web-Darstellung ausgelesen wird
+
+Andreas: Warum wird im 5-Minuten-Intervall ausgelesen, ist nur Counts_pro_minute wichtig oder auf hv-pulses, was ist sample_time.
+Reinhard: ==> Wichtig sind nur die counts_pro_minute. Hv_pulses ist zum Debugger und sample-time sind immer etwa die 150sec
+
+
 # Gesamtkarte/Wahlmöglichkeiten für die Nutzer/Legende: 
 Links oben kann über den Button "Zählrohre" der Nutzer einstellen, on er nur die Si22G-Rohre sehen will oder alle. Über den Button "AKWs/Anlagen" kann der Nutzer aktive, stillgelegte und sonstige Kraftwerke anzeigen lassen. Über den Button "Wind" kann er die aktuellen Windrichtungen und Windströme zuschalten, Über eine Suchmaske 
 Unter dem Button "Info" steht wichtiges zur Karte, das sollten wir übernehmen: 
 
 # Allgemein
-
 Auf der Karte wird jede Zählstation mit dem Radioaktivitäts-Symbol angezeigt. Die Farbe des Symbols ändert sich mit der Zählrate, der Zusammenhang ist rechts oben in der Legende dargestellt.
 Hat der Sensor seit mind. 1 Stunde keine Daten mehr gesendet, so wird er dunkelgrau eingefärbt. Hat er über eine Woche nicht gesendet, wird er nicht mehr dargestellt.
 Die Karte ist standardmäßig auf Stuttgart ausgerichtet. Wenn der Aufruf der Webseite mit einer Stadt erfolgt (z.B: https://multigeiger.citysensor.de/Berlin), so wird die Karte auf diese Stadt zentriert.
