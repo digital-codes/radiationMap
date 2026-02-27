@@ -39,10 +39,11 @@ Umrechnung dann: let uSvph = value < 0 ? -1 : value / 60 * sv_factor[x.name];  x
 (in der Mail vom 4.2.2026 von Reinhard)
 
 # Darstellung der Kurve pro Sensor: 
-Standartdarstellung, wenn man auf den Sensorbutton klickt: "Strahlung über einen Tag" (24 h ) . Über Buttons oben links kann man umschalten: Strahlung 30 Tage, 7 Tage. Es gibt also 3 verschiedenen Darstellungen. 
-Bitte Überschriften "Strahlung über einen Tag,  Impulse pro Minute (bzw. Mikrosievert pro Stunde)" übernehmen 
-Die y-Achse zeigt aktuell Werte von 0,1-0,175 Mikrosievert. Die x-Achse zeigt die Uhrzeit in 3h-Abständen (wie die Skala/y-Achse sich bei erhöhter Strahlung automatisch aufweitet (also wie es programmiert wird), müßte Reinhard wissen). 
-Es gibt die gemessenen Werte ("alle Werte") in einer hellgrünen Kurse und den gleitenden Mittelwert über 1 h in einer dunkelgründen Kurse. Klickt man auf diese, erscheint der Zahlenwert. Beides wird unterhalb der Kurve in einer Legende erläutert. der aktuelle Messwert wird nochmal in einer kleinen Tabelle links unten im Kurvenfenster dargestellt. Über "Ende" schließen wir das Fenster wieder 
+Standartdarstellung, wenn man auf den Sensorbutton klickt: "Strahlung über einen Tag" (24 h ). Über Buttons oben links kann man umschalten: Strahlung 30 Tage, 7 Tage. Es gibt also 3 verschiedenen Darstellungen und es wäre gut, wenn wir die beibehalten können.  
+Bitte Überschriften "Strahlung über einen Tag, Impulse pro Minute (bzw. Mikrosievert pro Stunde)" übernehmen. 
+Die x-Achse zeigt die Uhrzeit in 3h-Abständen. 
+Die y-Achse zeigt aktuell/jetzt gerade Werte von 0,1 bis 0,175 Mikrosievert, also einen sehr kleinen Messbereich. Wie sich die Skala auf der y-Achse sich bei erhöhter Strahlung automatisch aufweitet, müßte Reinhard wissen. Es wäre gut, wenn wir das auch hätten. 
+Kurven: Es gibt die gemessenen Werte ("alle Werte") in einer hellgrünen Kurve und den gleitenden Mittelwert über 1 h in einer dunkelgründen Kurve. Klickt man auf diese, erscheint der entsprechende Zahlenwert. Der aktuelle Messwert wird nochmal in einer kleinen Tabelle links unten im Kurvenfenster dargestellt. Über "Ende" schließen wir das Fenster wieder. Alles sehr schön und durchdacht, können wir das auch so machen? 
 
 # Radonpeaks: 
 Mit den Skalen, so wie Reinhard sie gewählt hat, kann man den Radonpeak gut erkennen. Daher ist es gut, sie so beizubehalten. 
@@ -68,7 +69,9 @@ Reinhard: ==> Wichtig sind nur die counts_pro_minute. Hv_pulses ist zum Debugger
 
 # Gesamtkarte/Wahlmöglichkeiten für die Nutzer/Legende: 
 Links oben kann über den Button "Zählrohre" der Nutzer einstellen, on er nur die Si22G-Rohre sehen will oder alle. Über den Button "AKWs/Anlagen" kann der Nutzer aktive, stillgelegte und sonstige Kraftwerke anzeigen lassen. Über den Button "Wind" kann er die aktuellen Windrichtungen und Windströme zuschalten, Über eine Suchmaske 
-Unter dem Button "Info" steht wichtiges zur Karte, das sollten wir übernehmen: 
+
+# Unter dem Button "Info" steht wichtiges allgmeines zur Karte:
+(Das sollten wir übernehmen) 
 
 # Allgemein
 Auf der Karte wird jede Zählstation mit dem Radioaktivitäts-Symbol angezeigt. Die Farbe des Symbols ändert sich mit der Zählrate, der Zusammenhang ist rechts oben in der Legende dargestellt.
