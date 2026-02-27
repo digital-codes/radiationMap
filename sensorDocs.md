@@ -8,9 +8,8 @@ https://ecocurious.de/multigeiger-karte/
 Die Seite ist aktuell mit Rand eingebunden. Es wäre gut, wenn wir die neue Darstellung rechts und links randlos einbinden können 
 
 # Sensortypen bzw. welche Sensoren sind unsere? 
-Es gibt 3 verschiedenen Zählrohrtypen: Si22g, SDM19 und SDM20. 
-Jürgen: Ich würde sagen: immer wenn ein Sensor das Wort "radiation" mit drin hat, ist es einer von uns. Siehe:
-https://archive.sensor.community/2026-02-02/
+Es gibt 3 verschiedenen Zählrohrtypen: Si22G, SBM-19 und SBM-20. Sie sind unterschiedlich lang. Si22G ist das längste und beste (Messtechnisch empfindlichste). 
+Jürgen: Immer wenn ein Sensor das Wort "radiation" mit drin hat, ist es einer von uns. Siehe: https://archive.sensor.community/2026-02-02/
 
 # Farbe der Open-Steetmap-Karte: 
 Bitte wieder das dezente grau! 
@@ -34,9 +33,9 @@ kernkraftwerk: rgb(232, 0, 0)
 Stillgelegte AKW: kreisförmig mit rgb(232, 0, 0), Mitte weiß (siehe Karte) 
 
 # Umrechnung CPM in Mikrosievert: 
-Reinhard: ==> die Umrechnung cpm in µSv wird in dem Webseiten-Programm gemacht, die Konstante ist für jedes Rohr hinterlegt: let sv_factor = {'SBM-20': 1 / 2.47, 'SBM-19': 1 / 9.81888, 'Si22G': 0.081438, 'J306': 0.06536};
+Reinhard: ==> die Umrechnung cpm in µSv wird in dem Webseiten-Programm gemacht, die Konstante ist für jedes Zählrohr anders und hier hinterlegt: let sv_factor = {'SBM-20': 1 / 2.47, 'SBM-19': 1 / 9.81888, 'Si22G': 0.081438, 'J306': 0.06536};
 Umrechnung dann: let uSvph = value < 0 ? -1 : value / 60 * sv_factor[x.name];  x.name ist der Name des Rohres aus dem Array sv_factor
-(in der Mail vom 4.2.2026 von Reinhard)
+(siehe Mail vom 4.2.2026 von Reinhard)
 
 # Darstellung der Kurve pro Sensor: 
 Standartdarstellung, wenn man auf den Sensorbutton klickt: "Strahlung über einen Tag" (24 h ). Über Buttons oben links kann man umschalten: Strahlung 30 Tage, 7 Tage. Es gibt also 3 verschiedenen Darstellungen und es wäre gut, wenn wir die beibehalten können.  
