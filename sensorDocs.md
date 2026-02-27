@@ -7,9 +7,9 @@ https://radiation.ok-lab-karlsruhe.de/
 https://ecocurious.de/multigeiger-karte/
 Die Seite ist aktuell mit Rand eingebunden. Es wäre gut, wenn wir die neue Darstellung rechts und links randlos einbinden können 
 
-# Sensortypen: 
+# Sensortypen bzw. welche Sensoren sind unsere? 
 Es gibt 3 verschiedenen Zählrohrtypen: Si22g, SDM19 und SDM20. 
-Reinhard: Ich würde sagen immer wenn ein Sensor das Wort "radiation" mit drin hat ist es einer von uns. Siehe:
+Jürgen: Ich würde sagen: immer wenn ein Sensor das Wort "radiation" mit drin hat, ist es einer von uns. Siehe:
 https://archive.sensor.community/2026-02-02/
 
 # Farbe der Open-Steetmap-Karte: 
